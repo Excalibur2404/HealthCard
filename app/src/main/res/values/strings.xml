@@ -1,0 +1,15 @@
+<resources>
+    <string name="app_name">HealthCard</string>
+    <string name="security_question_1">Sie sind dabei das Kind </string>
+    <string name="security_question_2"> mit allen Daten zu löschen. Wollen sie fortfahren?</string>
+    <string name="yes">Ja</string>
+    <string name="no">Nein</string>
+    <string name="male">männlich</string>
+    <string name="female">weiblich</string>
+    <string name="firstName">Vorname</string>
+    <string name="lastName">Nachname</string>
+    <string name="gender">Geschlecht</string>
+    <string name="birthdate">Geburtstag</string>
+    <string name="cancel">Abbrechen</string>
+    <string name="save">Speichern</string>
+</resources>

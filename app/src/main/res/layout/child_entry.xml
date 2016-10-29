@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                xmlns:app="http://schemas.android.com/apk/res-auto">
+    <ImageView
+        android:layout_width="100sp"
+        android:layout_height="100sp"
+        android:id="@+id/childPicture"
+        android:layout_weight="1"
+        android:layout_margin="5sp"
+        android:clickable="true"
+        android:layout_centerVertical="true"
+        android:scaleType="fitCenter"
+        android:background="@drawable/ic_person_placeholder"/>
+
+    <TextView
+        android:text="First Name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@id/childPicture"
+        android:textSize="25sp"
+        android:id="@+id/tv_child_first_name"
+        android:layout_weight="1"
+        android:layout_centerHorizontal="false"
+        android:layout_centerInParent="true"
+        android:layout_margin="5sp"/>
+
+    <ImageButton
+        android:id="@+id/ib_delete_child"
+        android:layout_centerVertical="true"
+        android:layout_margin="5sp"
+        android:layout_alignParentRight="true"
+        android:padding="7sp"
+        android:visibility="visible"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:background="@drawable/ic_delete"
+        android:elevation="0dp"/>
+
+    <ImageButton
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:id="@+id/ib_edit"
+        android:layout_centerVertical="true"
+        android:layout_margin="5sp"
+        android:layout_toLeftOf="@id/ib_delete_child"
+        android:padding="7sp"
+        android:visibility="visible"
+        android:background="@drawable/ic_edit"/>
+</RelativeLayout>
