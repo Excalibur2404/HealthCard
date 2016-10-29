@@ -1,5 +1,9 @@
 package com.example.carstenzimmermann.healthcard.fragments;
 
+import android.app.Activity;
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -16,6 +20,8 @@ import com.example.carstenzimmermann.healthcard.DataManager;
 import com.example.carstenzimmermann.healthcard.R;
 import com.example.carstenzimmermann.healthcard.entities.Child;
 
+import java.io.FileNotFoundException;
+import java.io.InputStream;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -34,6 +40,7 @@ public class EditChildFragment extends Fragment
     public static final String KEY_TASK = "task";
     private int childId;
     private String task;
+    private static int PICK_PHOTO_FOR_AVATAR = 1;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState)
@@ -127,6 +134,15 @@ public class EditChildFragment extends Fragment
             }
         });
 
+        ibPortrait.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+                pickImage();
+            }
+        });
+
         return view;
     }
 
@@ -134,5 +150,38 @@ public class EditChildFragment extends Fragment
     {
         public void onSaveChildClicked(Child child);
         public void onCancelClicked();
+    }
+
+    private void pickImage() {
+        Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+        intent.setType("image/*");
+        startActivityForResult(intent, PICK_PHOTO_FOR_AVATAR);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        InputStream inputStream = null;
+        if (requestCode == PICK_PHOTO_FOR_AVATAR && resultCode == Activity.RESULT_OK) {
+            if (data == null) {
+                Log.d(this.getClass().getName(), "The result was empty!");
+                return;
+            }
+            Log.d(this.getClass().getName(), "I received a picture!");
+
+            try
+            {
+                inputStream = this.getContext().getContentResolver().openInputStream(data.getData());
+            }
+            catch (FileNotFoundException e)
+            {
+                e.printStackTrace();
+            }
+            Bitmap avatarLarge = BitmapFactory.decodeStream(inputStream);
+            //TODO: make image smaller, if necessary (size is above 200dpx200dp)
+            ImageButton ibPortrait = (ImageButton)this.getView().findViewById(R.id.ibPortrait);
+            ibPortrait.setImageBitmap(avatarLarge);
+        }
     }
 }
