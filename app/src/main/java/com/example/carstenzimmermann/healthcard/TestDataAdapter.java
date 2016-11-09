@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.ListAdapter;
 import android.widget.TextView;
 
@@ -90,7 +91,11 @@ public class TestDataAdapter extends BaseAdapter implements ListAdapter
 
         // now fill the row with data
         final Child child = (Child) children.get(position);
-
+        ImageView portrait = (ImageView)row.findViewById(R.id.childPicture);
+        if (child.getPortrait() != null)
+        {
+            portrait.setImageBitmap(child.getPortrait());
+        }
         TextView tvFirstName = (TextView) row.findViewById(R.id.tv_child_first_name);
         tvFirstName.setText(child.getFirstName());
 

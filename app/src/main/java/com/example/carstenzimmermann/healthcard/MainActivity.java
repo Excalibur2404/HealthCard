@@ -51,9 +51,14 @@ public class MainActivity
         arguments.putInt(Child.KEY_ID, child.get_id());
         arguments.putString(Child.KEY_FIRST_NAME, child.getFirstName());
         arguments.putString(Child.KEY_LAST_NAME, child.getLastName());
-        arguments.putLong(Child.KEY_BIRTHDATE, child.getBirthdateLong());
+        arguments.putInt(Child.KEY_BIRTHDATE_YEAR, child.getBirthdateYear());
+        arguments.putInt(Child.KEY_BIRTHDATE_MONTH, child.getBirthdateMonth());
+        arguments.putInt(Child.KEY_BIRTHDATE_DAY_OF_MONTH, child.getBirthdateDayOfMonth());
         arguments.putInt(Child.KEY_SEX, child.getSex());
+        arguments.putParcelable(Child.KEY_PORTRAIT, child.getPortrait());
+
         arguments.putString(EditChildFragment.KEY_TASK, EditChildFragment.TASK_EDIT_CHILD);
+
         editChildFragment.setArguments(arguments);
         FragmentTransaction fragmentTransaction = fm.beginTransaction();
         fragmentTransaction.replace(R.id.fragmentContainer, editChildFragment);

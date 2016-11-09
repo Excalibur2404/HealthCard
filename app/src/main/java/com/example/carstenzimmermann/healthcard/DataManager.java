@@ -30,39 +30,36 @@ public class DataManager
     private ArrayList<Child> children;
     int nextFreeId;
 
-    //TODO: Add method to update a childs data
-
     public DataManager()
     {
         SimpleDateFormat format = new SimpleDateFormat("dd.MM.yyyy");
         this.children = new ArrayList<Child>();
-        try
-        {
-            children.add(new Child(
-                    1,
-                    "Jonna",
-                    "Zimmermann",
-                    format.parse("29.04.2015"),
-                    Child.FEMALE));
+        children.add(new Child(
+                1,
+                "Jonna",
+                "Zimmermann",
+                29,
+                4,
+                2015,
+                Child.FEMALE));
 
-            children.add(new Child(
-                    2,
-                    "Felix",
-                    "Ellekotten",
-                    format.parse("19.11.2015"),
-                    Child.MALE));
+        children.add(new Child(
+                2,
+                "Felix",
+                "Ellekotten",
+                19,
+                11,
+                2015,
+                Child.MALE));
 
-            children.add(new Child(
-                    3,
-                    "Max",
-                    "Mustermann",
-                    format.parse("01.01.2014"),
-                    Child.MALE));
-        }
-        catch (ParseException e)
-        {
-            e.printStackTrace();
-        }
+        children.add(new Child(
+                3,
+                "Max",
+                "Mustermann",
+                1,
+                1,
+                2014,
+                Child.MALE));
         nextFreeId = 4;
 
     }
