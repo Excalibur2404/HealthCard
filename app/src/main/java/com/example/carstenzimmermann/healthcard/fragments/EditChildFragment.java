@@ -13,6 +13,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v4.content.res.ResourcesCompat;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
@@ -47,17 +48,25 @@ import java.util.Locale;
 
 public class EditChildFragment extends Fragment
 {
-    static final String CHILD = "child";
-    private DateFormat df;
-    EditChildFragmentListener listener;
-    public static String EDIT_CHILD_FRAGMENT_LISTENER = "listener";
-    public static final String TASK_NEW_CHILD = "new_child";
-    public static final String TASK_EDIT_CHILD = "edit_child";
-    public static final String KEY_TASK = "task";
-    private int childId;
-    private String task;
-    private static int PICK_PHOTO_FOR_AVATAR = 1;
-    private boolean imageChanged;
+    // constants
+    public static final String          TASK_NEW_CHILD = "new_child";
+    public static final String          TASK_EDIT_CHILD = "edit_child";
+    public static final String          KEY_TASK = "task";
+    private static int                  PICK_PHOTO_FOR_AVATAR = 1;
+
+    private DateFormat                  df;
+    private EditChildFragmentListener   listener;
+    private int                         childId;
+    private String                      task;
+    private boolean                     imageChanged;
+
+
+    public interface EditChildFragmentListener
+    {
+        public void onSaveChildClicked(Child child);
+        public void onCancelClicked();
+        public void onDateEditClicked();
+    }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState)
@@ -82,6 +91,7 @@ public class EditChildFragment extends Fragment
         final RadioButton rbMale = (RadioButton) view.findViewById(R.id.rbMale);
         final ImageView ibPortrait = (ImageView) view.findViewById(R.id.ibPortrait);
 
+        /*
         Bundle bundle = this.getArguments();
         task = bundle.getString(KEY_TASK);
         if (TASK_EDIT_CHILD.equals(task))
@@ -142,69 +152,14 @@ public class EditChildFragment extends Fragment
         else
         {
             childId = 0; // indicates, that this child is not saved yet
-        }
+        }*/
 
         btSave.setOnClickListener(new View.OnClickListener()
         {
             @Override
             public void onClick(View v)
             {
-                // validate the input
-                if ("".equals(etFirstName.getText().toString()) && "".equals(etLastName.getText().toString()))
-                {
-                    showValidationMessage(R.string.ValidationMessageNameMissing);
-                    return;
-                }
-                if (!rbFemale.isChecked() && !rbMale.isChecked())
-                {
-                    showValidationMessage(R.string.ValidationMessageNoSexSelected);
-                    return;
-                }
-                Date birthdate = null;
-                try
-                {
-                    birthdate = df.parse(tvBirthdate.getText().toString());
-                }
-                catch (ParseException e)
-                {
-                    showValidationMessage(R.string.ValidationMessageDateWrong);
-                    return;
-                }
-
-                Child child = new Child();
-                child.set_id(childId);
-                child.setFirstName(etFirstName.getText().toString());
-                child.setLastName(etLastName.getText().toString());
-                Calendar cal = Calendar.getInstance();
-                cal.setTime(birthdate);
-                child.setBirthdateDayOfMonth(cal.get(Calendar.DAY_OF_MONTH));
-                child.setBirthdateMonth(cal.get(Calendar.MONTH));
-                child.setBirthdateYear(cal.get(Calendar.YEAR));
-                if (rbFemale.isChecked())
-                {
-                    child.setSex(Child.FEMALE);
-                }
-                else
-                {
-                    child.setSex(Child.MALE);
-                }
-
-                try
-                {
-                    if (imageChanged)
-                    {
-                        Drawable drawable = ibPortrait.getDrawable();
-                        BitmapDrawable bitmapDrawable = (BitmapDrawable) drawable;
-                        Bitmap portrait = bitmapDrawable.getBitmap();
-                        child.setPortrait(portrait);
-                    }
-                }
-                catch (ClassCastException e)
-                {
-                    Log.d(this.getClass().getName(), "The image could not be converted into a bitmap.");
-                }
-
-                listener.onSaveChildClicked(child);
+                validateInput();
             }
         });
 
@@ -226,23 +181,89 @@ public class EditChildFragment extends Fragment
             }
         });
 
+        tvBirthdate.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+                listener.onDateEditClicked();
+            }
+        });
         return view;
     }
 
-    public interface EditChildFragmentListener
+    public void displayChild(Child child)
     {
-        public void onSaveChildClicked(Child child);
-        public void onCancelClicked();
+        // get references to the view elements
+        Button btSave = (Button) getView().findViewById(R.id.btSave);
+        Button btCancel = (Button) getView().findViewById(R.id.btCancel);
+        final EditText etFirstName = (EditText)getView().findViewById(R.id.etFirstName);
+        final EditText etLastName = (EditText)getView().findViewById(R.id.etLastName);
+        final TextView tvBirthdate = (TextView)getView().findViewById(R.id.tvBirthdate);
+        final RadioButton rbFemale = (RadioButton) getView().findViewById(R.id.rbFemale);
+        final RadioButton rbMale = (RadioButton) getView().findViewById(R.id.rbMale);
+        final ImageView ibPortrait = (ImageView) getView().findViewById(R.id.ibPortrait);
+
+        etFirstName.setText(child.getFirstName());
+        etLastName.setText(child.getLastName());
+        Calendar cal = Calendar.getInstance();
+        if (child.getBirthdateDayOfMonth() != 0 || child.getBirthdateMonth() != 0 || child.getBirthdateYear() != 0)
+        {
+            cal.set(Calendar.YEAR, child.getBirthdateYear());
+            cal.set(Calendar.MONTH, child.getBirthdateMonth());
+            cal.set(Calendar.DAY_OF_MONTH, child.getBirthdateDayOfMonth());
+        }
+        tvBirthdate.setText(df.format(cal.getTime()));
+
+        if (Child.FEMALE == child.getSex())
+        {
+            rbFemale.setChecked(true);
+            rbMale.setChecked(false);
+        }
+        else
+        {
+            rbFemale.setChecked(false);
+            rbMale.setChecked(true);
+        }
+        if (child.getPortrait() != null)
+        {
+            ibPortrait.setImageBitmap(child.getPortrait());
+        }
+        childId = child.get_id();
     }
 
-    private void pickImage() {
+    public void clearChild()
+    {
+        // get references to the view elements
+        Button btSave = (Button) getView().findViewById(R.id.btSave);
+        Button btCancel = (Button) getView().findViewById(R.id.btCancel);
+        final EditText etFirstName = (EditText)getView().findViewById(R.id.etFirstName);
+        final EditText etLastName = (EditText)getView().findViewById(R.id.etLastName);
+        final TextView tvBirthdate = (TextView)getView().findViewById(R.id.tvBirthdate);
+        final RadioButton rbFemale = (RadioButton) getView().findViewById(R.id.rbFemale);
+        final RadioButton rbMale = (RadioButton) getView().findViewById(R.id.rbMale);
+        final ImageView ibPortrait = (ImageView) getView().findViewById(R.id.ibPortrait);
+
+        childId = 0;
+        ibPortrait.setImageDrawable(ResourcesCompat.getDrawable(getResources(), R.drawable.ic_person_placeholder, null));
+        etFirstName.setText("");;
+        etLastName.setText("");
+        Calendar cal = Calendar.getInstance();
+        tvBirthdate.setText(df.format(cal.getTime()));
+        rbFemale.setChecked(false);
+        rbMale.setChecked(false);
+    }
+
+    private void pickImage()
+    {
         Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
         intent.setType("image/*");
         startActivityForResult(intent, PICK_PHOTO_FOR_AVATAR);
     }
 
     @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+    public void onActivityResult(int requestCode, int resultCode, Intent data)
+    {
         super.onActivityResult(requestCode, resultCode, data);
 
         InputStream inputStream = null;
@@ -302,5 +323,85 @@ public class EditChildFragment extends Fragment
         transaction.add(dialog, "CCONSISTENCY_CHECK");
         transaction.addToBackStack(null);
         transaction.commit();
+    }
+
+    public void setBirthdate(int year, int month, int dayOfMonth)
+    {
+        TextView tvBirthdate = (TextView) getView().findViewById(R.id.tvBirthdate);
+        Calendar cal = Calendar.getInstance();
+        cal.set(Calendar.YEAR, year);
+        cal.set(Calendar.MONTH, month);
+        cal.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+        tvBirthdate.setText(df.format(cal.getTime()));
+    }
+
+    private void validateInput()
+    {
+        // get references to the view elements
+        Button btSave = (Button) getView().findViewById(R.id.btSave);
+        Button btCancel = (Button) getView().findViewById(R.id.btCancel);
+        final EditText etFirstName = (EditText)getView().findViewById(R.id.etFirstName);
+        final EditText etLastName = (EditText)getView().findViewById(R.id.etLastName);
+        final TextView tvBirthdate = (TextView)getView().findViewById(R.id.tvBirthdate);
+        final RadioButton rbFemale = (RadioButton) getView().findViewById(R.id.rbFemale);
+        final RadioButton rbMale = (RadioButton) getView().findViewById(R.id.rbMale);
+        final ImageView ibPortrait = (ImageView) getView().findViewById(R.id.ibPortrait);
+
+        // validate the input
+        if ("".equals(etFirstName.getText().toString()) && "".equals(etLastName.getText().toString()))
+        {
+            showValidationMessage(R.string.ValidationMessageNameMissing);
+            return;
+        }
+        if (!rbFemale.isChecked() && !rbMale.isChecked())
+        {
+            showValidationMessage(R.string.ValidationMessageNoSexSelected);
+            return;
+        }
+        Date birthdate = null;
+        try
+        {
+            birthdate = df.parse(tvBirthdate.getText().toString());
+        }
+        catch (ParseException e)
+        {
+            showValidationMessage(R.string.ValidationMessageDateWrong);
+            return;
+        }
+
+        Child child = new Child();
+        child.set_id(childId);
+        child.setFirstName(etFirstName.getText().toString());
+        child.setLastName(etLastName.getText().toString());
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(birthdate);
+        child.setBirthdateDayOfMonth(cal.get(Calendar.DAY_OF_MONTH));
+        child.setBirthdateMonth(cal.get(Calendar.MONTH));
+        child.setBirthdateYear(cal.get(Calendar.YEAR));
+        if (rbFemale.isChecked())
+        {
+            child.setSex(Child.FEMALE);
+        }
+        else
+        {
+            child.setSex(Child.MALE);
+        }
+
+        try
+        {
+            if (imageChanged)
+            {
+                Drawable drawable = ibPortrait.getDrawable();
+                BitmapDrawable bitmapDrawable = (BitmapDrawable) drawable;
+                Bitmap portrait = bitmapDrawable.getBitmap();
+                child.setPortrait(portrait);
+            }
+        }
+        catch (ClassCastException e)
+        {
+            Log.d(this.getClass().getName(), "The image could not be converted into a bitmap.");
+        }
+
+        listener.onSaveChildClicked(child);
     }
 }
