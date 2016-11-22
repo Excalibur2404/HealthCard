@@ -13,6 +13,7 @@ import android.widget.BaseAdapter;
 import android.widget.TextView;
 
 import com.example.carstenzimmermann.healthcard.entities.Child;
+import com.example.carstenzimmermann.healthcard.entities.Measurement;
 
 
 import java.text.ParseException;
@@ -28,7 +29,9 @@ public class DataManager
 {
     public static DataManager dataManager;
     private ArrayList<Child> children;
-    int nextFreeId;
+    private ArrayList<Measurement> measurements;
+    private int nextFreeChildId;
+    private int nextFreeMeasurementId;
 
     public DataManager()
     {
@@ -60,8 +63,7 @@ public class DataManager
                 1,
                 2014,
                 Child.MALE));
-        nextFreeId = 4;
-
+        nextFreeChildId = 4;
     }
 
     public Child getChildById(int id)
@@ -92,12 +94,13 @@ public class DataManager
 
     public void deleteChild(int _id)
     {
-        Iterator<Child> it = children.iterator();
-        for (Child child : children)
+        for (Iterator<Child> it = children.iterator(); it.hasNext(); )
         {
+            Child child = it.next();
             if (_id == child.get_id())
             {
-                children.remove(child);
+                it.remove();
+                return;
             }
         }
     }
@@ -106,7 +109,7 @@ public class DataManager
     {
         if (child.get_id() == 0)
         {
-            child.set_id(getNewId());
+            child.set_id(getNewChildId());
             children.add(child);
         }
 
@@ -122,10 +125,17 @@ public class DataManager
         }
     }
 
-    private int getNewId()
+    private int getNewChildId()
     {
-        int id = nextFreeId;
-        nextFreeId++;
+        int id = nextFreeChildId;
+        nextFreeChildId++;
+        return id;
+    }
+
+    private int getNewMeasurementId()
+    {
+        int id = nextFreeMeasurementId;
+        nextFreeMeasurementId++;
         return id;
     }
 
@@ -164,9 +174,30 @@ public class DataManager
             {
                 convertView = inflater.inflate(R.layout.child_entry, null);
                 TextView firstName = (TextView)convertView.findViewById(R.id.tv_child_first_name);
-//                firstName.setText();
             }
             return null;
         }
     }
+
+    public void saveMeasurement(Measurement measurement)
+    {
+        if (measurement.get_id() == 0)
+        {
+            measurement.set_id(getNewMeasurementId());
+            measurements.add(measurement);
+        }
+        else
+        {
+            for (Measurement m : measurements)
+            {
+                if (m.get_id() == measurement.get_id())
+                {
+                    Log.d(this.getClass().getName(), "Updating measurement...");
+                    measurements.set(measurements.indexOf(m), measurement);
+                    Log.d(this.getClass().getName(), "...measurement updated.");
+                }
+            }
+        }
+    }
 }
+

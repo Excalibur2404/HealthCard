@@ -53,6 +53,7 @@ public class EditChildFragment extends Fragment
     public static final String          TASK_EDIT_CHILD = "edit_child";
     public static final String          KEY_TASK = "task";
     private static int                  PICK_PHOTO_FOR_AVATAR = 1;
+    public static final int             DATE_REQUESTER_ID = 1;
 
     private DateFormat                  df;
     private EditChildFragmentListener   listener;
@@ -65,7 +66,7 @@ public class EditChildFragment extends Fragment
     {
         public void onSaveChildClicked(Child child);
         public void onCancelClicked();
-        public void onDateEditClicked();
+        public void onDateEditClicked(int dateRequesterId);
     }
 
     @Override
@@ -84,75 +85,8 @@ public class EditChildFragment extends Fragment
         listener = (EditChildFragmentListener)this.getActivity();
         Button btSave = (Button) view.findViewById(R.id.btSave);
         Button btCancel = (Button) view.findViewById(R.id.btCancel);
-        final EditText etFirstName = (EditText)view.findViewById(R.id.etFirstName);
-        final EditText etLastName = (EditText)view.findViewById(R.id.etLastName);
         final TextView tvBirthdate = (TextView)view.findViewById(R.id.tvBirthdate);
-        final RadioButton rbFemale = (RadioButton) view.findViewById(R.id.rbFemale);
-        final RadioButton rbMale = (RadioButton) view.findViewById(R.id.rbMale);
         final ImageView ibPortrait = (ImageView) view.findViewById(R.id.ibPortrait);
-
-        /*
-        Bundle bundle = this.getArguments();
-        task = bundle.getString(KEY_TASK);
-        if (TASK_EDIT_CHILD.equals(task))
-        {
-            //TODO: Offer a UI to crop the image by user preferences
-            if (bundle != null)
-            {
-                childId = bundle.getInt(Child.KEY_ID);
-                etFirstName.setText(bundle.getString(Child.KEY_FIRST_NAME));
-                etLastName.setText(bundle.getString(Child.KEY_LAST_NAME));
-                int birthdateDayOfMonth = bundle.getInt(Child.KEY_BIRTHDATE_DAY_OF_MONTH);
-                int birthdateMonth = bundle.getInt(Child.KEY_BIRTHDATE_MONTH);
-                int birthdateYear = bundle.getInt(Child.KEY_BIRTHDATE_YEAR);
-
-                Calendar cal = Calendar.getInstance();
-                if (birthdateDayOfMonth == 0 || birthdateMonth == 0 || birthdateYear == 0)
-                {
-
-                    cal.set(Calendar.YEAR, cal.get(Calendar.YEAR));
-                    cal.set(Calendar.MONTH, cal.get(Calendar.MONTH));
-                    cal.set(Calendar.DAY_OF_MONTH, cal.get(Calendar.DAY_OF_MONTH));
-
-                }
-                else
-                {
-                    cal.set(Calendar.YEAR, birthdateYear);
-                    cal.set(Calendar.MONTH, birthdateMonth);
-                    cal.set(Calendar.DAY_OF_MONTH, birthdateDayOfMonth);
-                    tvBirthdate.setText(df.format(cal.getTime()));
-                }
-
-                if (Child.FEMALE == bundle.getInt(Child.KEY_SEX))
-                {
-                    rbFemale.setChecked(true);
-                    rbMale.setChecked(false);
-                }
-                else
-                {
-                    rbFemale.setChecked(false);
-                    rbMale.setChecked(true);
-                }
-                Parcelable portraitParcel = bundle.getParcelable(Child.KEY_PORTRAIT);
-                Bitmap portrait = null;
-                if (portraitParcel != null)
-                {
-                    try
-                    {
-                        portrait = (Bitmap)portraitParcel;
-                        ibPortrait.setImageBitmap(portrait);
-                    }
-                    catch (ClassCastException e)
-                    {
-                        Log.d(this.getClass().getName(), "Could not cast an image to a Bitmap.");
-                    }
-                }
-            }
-        }
-        else
-        {
-            childId = 0; // indicates, that this child is not saved yet
-        }*/
 
         btSave.setOnClickListener(new View.OnClickListener()
         {
@@ -186,7 +120,7 @@ public class EditChildFragment extends Fragment
             @Override
             public void onClick(View v)
             {
-                listener.onDateEditClicked();
+                listener.onDateEditClicked(DATE_REQUESTER_ID);
             }
         });
         return view;
@@ -402,6 +336,7 @@ public class EditChildFragment extends Fragment
             Log.d(this.getClass().getName(), "The image could not be converted into a bitmap.");
         }
 
+        //TODO: Refactor, so that the method returns a boolean value
         listener.onSaveChildClicked(child);
     }
 }

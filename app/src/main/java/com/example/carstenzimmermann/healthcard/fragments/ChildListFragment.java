@@ -1,12 +1,10 @@
 package com.example.carstenzimmermann.healthcard.fragments;
 
 import android.app.Activity;
-import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -53,7 +51,7 @@ public class ChildListFragment extends Fragment implements TestDataAdapter.TestD
             @Override
             public void onClick(View v)
             {
-                listener.onAddClicked();
+                listener.onAddChildClicked();
             }
         });
 
@@ -67,14 +65,29 @@ public class ChildListFragment extends Fragment implements TestDataAdapter.TestD
     }
 
     @Override
-    public void onAddClicked()
+    public void onAddMeasurementClicked(int childId)
     {
-        listener.onAddClicked();
+        listener.onAddMeasurementClicked(childId);
+    }
+
+    @Override
+    public void onDeleteClicked(int id)
+    {
+        listener.onDeleteClicked(id);
+    }
+
+    public void notifyDataSetChanged()
+    {
+        ListView lvChildren = (ListView)getView().findViewById(R.id.child_list);
+        TestDataAdapter testDataAdapter = (TestDataAdapter)lvChildren.getAdapter();
+        testDataAdapter.notifyDataSetChanged();
     }
 
     public interface ChildListFragmentListener
     {
         public void editChild(int id);
-        public void onAddClicked();
+        public void onAddChildClicked();
+        public void onAddMeasurementClicked(int childId);
+        public void onDeleteClicked(int id);
     }
 }

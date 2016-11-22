@@ -105,10 +105,10 @@ public class TestDataAdapter extends BaseAdapter implements ListAdapter
             @Override
             public void onClick(View v)
             {
-                children.remove(position);
-                notifyDataSetChanged();
+                listener.onDeleteClicked(child.get_id());
             }
         });
+
         ImageButton ibEditChild = (ImageButton) row.findViewById(R.id.ib_edit);
         ibEditChild.setOnClickListener(new View.OnClickListener()
         {
@@ -118,13 +118,26 @@ public class TestDataAdapter extends BaseAdapter implements ListAdapter
                 listener.onEditClicked(child.get_id());
             }
         });
+
+        ImageButton ibAddMeasurement = (ImageButton) row.findViewById(R.id.ibAddMeasurement);
+        ibAddMeasurement.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+                listener.onAddMeasurementClicked(child.get_id());
+            }
+        });
+
         return row;
     }
 
     public interface TestDataAdapterListener
     {
         public void onEditClicked(int id);
-        public void onAddClicked();
+        public void onAddMeasurementClicked(int childId);
+        //TODO: Use the delete click to display a warning message and wait for confirmation
+        public void onDeleteClicked(int id);
     }
 
 }

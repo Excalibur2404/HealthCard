@@ -13,9 +13,14 @@
     <string name="cancel">Abbrechen</string>
     <string name="save">Speichern</string>
     <string name="valueInvalid">Eingabe ungültig</string>
-    <string name="ValidationMessageDateWrong">Das eingegebene Geburtsdatum ist ungültig. Bitte geben Sie ein Datum im Format 31.12.2016 an.</string>
+    <string name="ValidationMessageDateWrong">Das eingegebene Datum ist ungültig. Bitte geben Sie ein Datum im Format 31.12.2016 an.</string>
     <string name="ok">Ok</string>
     <string name="ValidationMessageNameMissing">Es muss mindestens ein Vorname oder Nachname eingegeben werden.</string>
     <string name="ValidationTitle">Konsistenzprüfung fehlgeschlagen</string>
     <string name="ValidationMessageNoSexSelected">Bitte wählen Sie das Geschlecht des Kindes aus.</string>
+    <string name="ValidationMessageNoMeasurementValues">Bitte geben sie mindestens eine der beiden Messgrößen an.</string>
+    <string name="ValidationMessageNoMeasurementDate">Bitte wählen Sie das Datum, an dem Sie die Werte gemessen haben.</string>
+    <string name="height">Größe</string>
+    <string name="weight">Gewicht</string>
+    <string name="dateOfMeasurement">Datum der Messung</string>
 </resources>
