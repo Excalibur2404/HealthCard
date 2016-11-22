@@ -1,5 +1,7 @@
 package com.example.carstenzimmermann.healthcard.entities;
 
+import android.icu.util.Measure;
+
 /**
  * Created by Carsten Zimmermann on 22.10.2016.
  */
@@ -13,6 +15,19 @@ public class Measurement
     private int year;
     private int _id;
     private int childId;
+
+    public Measurement(){}
+
+    public Measurement(int id, int childId, int dayOfMonth, int month, int year, float weight, float hight)
+    {
+        this._id = id;
+        this.childId = childId;
+        this.dayOfMonth = dayOfMonth;
+        this.month = month;
+        this.year = year;
+        this.weight = weight;
+        this.hight = hight;
+    }
 
     public float getWeight()
     {

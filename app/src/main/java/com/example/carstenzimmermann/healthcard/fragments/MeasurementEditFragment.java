@@ -32,7 +32,7 @@ public class MeasurementEditFragment extends Fragment
     private int measurementSetId;
     private int childId;
     private DateFormat df;
-    private MeasurementEditFragmentListener listener;
+    MeasurementEditFragmentListener listener;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState)
@@ -46,7 +46,7 @@ public class MeasurementEditFragment extends Fragment
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState)
     {
         View view = inflater.inflate(R.layout.measurement_edit, container, false);
-        final MeasurementEditFragmentListener listener = (MeasurementEditFragmentListener) this.getActivity();
+        listener = (MeasurementEditFragmentListener) this.getActivity();
         Button btSave = (Button) view.findViewById(R.id.btSave);
         Button btCancel = (Button) view.findViewById(R.id.btCancel);
         TextView tvDate = (TextView) view.findViewById(R.id.tvDate);
@@ -65,7 +65,6 @@ public class MeasurementEditFragment extends Fragment
             @Override
             public void onClick(View v)
             {
-                final MeasurementEditFragmentListener myListener = listener;
                 listener.onDateEditClicked(DATE_REQUESTER_ID);
             }
         });

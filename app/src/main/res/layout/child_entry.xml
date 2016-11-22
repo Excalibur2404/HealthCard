@@ -26,6 +26,7 @@
         android:background="@drawable/ic_delete"
         android:elevation="0dp"/>
 
+
     <ImageButton
         android:layout_width="40dp"
         android:layout_height="40dp"
@@ -40,10 +41,10 @@
     <ImageButton
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:srcCompat="@android:drawable/ic_input_add"
         android:layout_centerVertical="true"
         android:layout_toLeftOf="@id/ib_edit"
-        android:id="@+id/ibAddMeasurement"/>
+        android:id="@+id/ibAddMeasurement"
+        android:background="@android:drawable/ic_input_add"/>
 
     <TextView
         android:text="First Name"

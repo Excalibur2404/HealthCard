@@ -23,4 +23,6 @@
     <string name="height">Größe</string>
     <string name="weight">Gewicht</string>
     <string name="dateOfMeasurement">Datum der Messung</string>
+    <string name="deleteChildSecurityQuestion">Wollen sie den Eintrag und alle bisher erfassten Daten wirklich unwiderruflich löschen?</string>
+
 </resources>

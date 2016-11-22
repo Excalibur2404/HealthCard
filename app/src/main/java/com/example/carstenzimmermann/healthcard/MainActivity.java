@@ -139,7 +139,7 @@ public class MainActivity
             measurementEditFragment = new MeasurementEditFragment();
         }
         FragmentTransaction fta = fm.beginTransaction();
-        fta.replace(R.id.fragmentContainer, measurementEditFragment);
+        fta.replace(R.id.fragmentContainer, measurementEditFragment, MEASUREMENT_EDIT_FRAGMENT_TAG);
         fta.addToBackStack(null);
         fta.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
         fta.commit();
@@ -175,8 +175,8 @@ public class MainActivity
         AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(this, R.style.myDialog));
         builder
                 .setMessage("Are you sure to delete the child?")
-                .setPositiveButton("Yes", dialogClickListener)
-                .setNegativeButton("No", dialogClickListener)
+                .setPositiveButton(R.string.yes, dialogClickListener)
+                .setNegativeButton(R.string.no, dialogClickListener)
                 .show();
     }
 
