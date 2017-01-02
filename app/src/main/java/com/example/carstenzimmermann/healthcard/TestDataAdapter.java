@@ -1,8 +1,6 @@
 package com.example.carstenzimmermann.healthcard;
 
-import android.app.Activity;
 import android.content.Context;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,9 +22,9 @@ public class TestDataAdapter extends BaseAdapter implements ListAdapter
 {
     ArrayList<Child> children;
     Context context;
-    TestDataAdapterListener listener;
+    ITestDataAdapterListener listener;
 
-    public TestDataAdapter(Context c, TestDataAdapterListener listener)
+    public TestDataAdapter(Context c, ITestDataAdapterListener listener)
     {
         DataManager myDataManager = DataManager.getInstance();
         this.children = myDataManager.getChildren();
@@ -139,15 +137,26 @@ public class TestDataAdapter extends BaseAdapter implements ListAdapter
             }
         });
 
+        ImageButton ibListMeasurements = (ImageButton) row.findViewById(R.id.ibListMeasurements);
+        ibListMeasurements.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+                listener.onDisplayMeasurementsClicked(child.get_id());
+            }
+        });
+
         return row;
     }
 
-    public interface TestDataAdapterListener
+    public interface ITestDataAdapterListener
     {
         public void onEditClicked(int id);
         public void onAddMeasurementClicked(int childId);
         public void onDeleteClicked(int id);
         public void onDisplayChartClicked(int childId);
+        public void onDisplayMeasurementsClicked(int childId);
     }
 
 }

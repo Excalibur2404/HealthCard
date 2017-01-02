@@ -7,5 +7,5 @@
     <ListView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/measurement_list"/>
+        android:id="@+id/lv_measurement_list"/>
 </LinearLayout>

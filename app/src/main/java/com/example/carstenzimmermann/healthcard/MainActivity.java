@@ -20,6 +20,7 @@ import com.example.carstenzimmermann.healthcard.fragments.ChildListFragment;
 import com.example.carstenzimmermann.healthcard.fragments.DatePickerFragment;
 import com.example.carstenzimmermann.healthcard.fragments.EditChildFragment;
 import com.example.carstenzimmermann.healthcard.fragments.MeasurementEditFragment;
+import com.example.carstenzimmermann.healthcard.fragments.MeasurementListFragment;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -41,6 +42,7 @@ public class MainActivity
     public final String CHART_FRAGMENT_TAG = "chart_fragment";
     public final String EDIT_CHILD_FRAGMENT_TAG = "edit_child_fragment";
     public final String MEASUREMENT_EDIT_FRAGMENT_TAG = "measurment_edit_fragment";
+    public final String MEASUREMENT_LIST_FRAGMENT_TAG = "measurement_list_fragment";
     private int dateRequesterId;
 
 
@@ -239,6 +241,24 @@ public class MainActivity
             fm.executePendingTransactions();
             chartFragment.loadData(measurements, child.getFirstName() + " " + child.getLastName(), child.getSex(), child.getBirthdateDayOfMonth(), child.getBirthdateMonth(), child.getBirthdateYear());
         }
+    }
+
+    @Override
+    public void onDisplayMeasurementsClicked(int childId)
+    {
+        FragmentManager fm = getSupportFragmentManager();
+        MeasurementListFragment measurementListFragment = (MeasurementListFragment) fm.findFragmentByTag(MEASUREMENT_LIST_FRAGMENT_TAG);
+        if (measurementListFragment == null)
+        {
+            measurementListFragment = new MeasurementListFragment();
+        }
+        FragmentTransaction fragmentTransaction = fm.beginTransaction();
+        fragmentTransaction.replace(R.id.fragmentContainer, measurementListFragment, MEASUREMENT_LIST_FRAGMENT_TAG);
+        fragmentTransaction.addToBackStack(null);
+        fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
+        fragmentTransaction.commit();
+        fm.executePendingTransactions();
+        measurementListFragment.setChildFilter(childId);
     }
 
     @Override

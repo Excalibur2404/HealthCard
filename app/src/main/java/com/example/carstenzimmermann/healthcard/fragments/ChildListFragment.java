@@ -18,7 +18,7 @@ import com.example.carstenzimmermann.healthcard.TestDataAdapter;
  * Created by Carsten Zimmermann on 25.10.2016.
  */
 
-public class ChildListFragment extends Fragment implements TestDataAdapter.TestDataAdapterListener
+public class ChildListFragment extends Fragment implements TestDataAdapter.ITestDataAdapterListener
 {
     DataManager dataManager;
     ChildListFragmentListener listener;
@@ -82,6 +82,12 @@ public class ChildListFragment extends Fragment implements TestDataAdapter.TestD
         listener.onDisplayChartClicked(childId);
     }
 
+    @Override
+    public void onDisplayMeasurementsClicked(int childId)
+    {
+        listener.onDisplayMeasurementsClicked(childId);
+    }
+
     public void notifyDataSetChanged()
     {
         ListView lvChildren = (ListView)getView().findViewById(R.id.child_list);
@@ -96,5 +102,6 @@ public class ChildListFragment extends Fragment implements TestDataAdapter.TestD
         public void onAddMeasurementClicked(int childId);
         public void onDeleteClicked(int id);
         public void onDisplayChartClicked(int childId);
+        public void onDisplayMeasurementsClicked(int childId);
     }
 }

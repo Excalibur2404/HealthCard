@@ -225,5 +225,10 @@ public class DataManager
         }
         return resultSet;
     }
+
+    public ArrayList<Measurement> getMeasurements()
+    {
+        return measurements;
+    }
 }
 

@@ -137,22 +137,27 @@ public class ChartFragment extends Fragment
 
         lineData3Percentile = new LineDataSet(percentile3entries, getString(R.string.percentile3));
         lineData3Percentile.setColor(Color.rgb(255, 0, 0));
+        lineData3Percentile.setDrawValues(false);
         lines.add(lineData3Percentile);
 
         lineData15Percentile = new LineDataSet(percentile15entries, getString(R.string.percentile15));
         lineData15Percentile.setColor(Color.rgb(255, 114, 0));
+        lineData15Percentile.setDrawValues(false);
         lines.add(lineData15Percentile);
 
         lineDataMedian = new LineDataSet(medianEntries, getString(R.string.median));
         lineDataMedian.setColor(Color.rgb(0, 175, 0));
+        lineDataMedian.setDrawValues(false);
         lines.add(lineDataMedian);
 
         lineData85Percentile = new LineDataSet(percentile85entries, getString(R.string.percentile85));
         lineData85Percentile.setColor(Color.rgb(255, 114, 0));
+        lineData85Percentile.setDrawValues(false);
         lines.add(lineData85Percentile);
 
         lineData97Percentile = new LineDataSet(percentile97entries, getString(R.string.percentile97));
         lineData97Percentile.setColor(Color.rgb(255, 0, 0));
+        lineData97Percentile.setDrawValues(false);
         lines.add(lineData97Percentile);
 
         // draw the line of the child
