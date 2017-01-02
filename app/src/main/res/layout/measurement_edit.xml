@@ -15,7 +15,7 @@
         android:id="@+id/tvDate"/>
 
     <TextView
-        android:text="@string/height"
+        android:text="@string/height3rd"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_column="0"
@@ -31,7 +31,7 @@
         android:id="@+id/etHeight"/>
 
     <TextView
-        android:text="@string/weight"
+        android:text="@string/weight3rd"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_column="0"

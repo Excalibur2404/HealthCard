@@ -126,7 +126,7 @@ public class MeasurementEditFragment extends Fragment
         EditText etHeight = (EditText) getView().findViewById(R.id.etHeight);
         EditText etWeight = (EditText) getView().findViewById(R.id.etWeight);
 
-        tvDate.setText("");
+        tvDate.setText(df.format(Calendar.getInstance().getTime()));
         etHeight.setText("");
         etWeight.setText("");
         measurementSetId = 0;

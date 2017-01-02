@@ -195,7 +195,7 @@ public class MainActivity
     @Override
     public void onDisplayChartClicked(int childId)
     {
-        List<PointValue> valueList = new ArrayList<PointValue>();
+        Child child = dataManager.getChildById(childId);
         List<Measurement> measurements = dataManager.getMeasurements(childId);
 
         if (measurements.size() == 0)
@@ -237,7 +237,7 @@ public class MainActivity
             fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
             fragmentTransaction.commit();
             fm.executePendingTransactions();
-            chartFragment.loadData(measurements);
+            chartFragment.loadData(measurements, child.getFirstName() + " " + child.getLastName(), child.getSex(), child.getBirthdateDayOfMonth(), child.getBirthdateMonth(), child.getBirthdateYear());
         }
     }
 

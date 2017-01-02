@@ -20,9 +20,13 @@
     <string name="ValidationMessageNoSexSelected">Bitte wählen Sie das Geschlecht des Kindes aus.</string>
     <string name="ValidationMessageNoMeasurementValues">Bitte geben sie mindestens eine der beiden Messgrößen an.</string>
     <string name="ValidationMessageNoMeasurementDate">Bitte wählen Sie das Datum, an dem Sie die Werte gemessen haben.</string>
-    <string name="height">Größe</string>
-    <string name="weight">Gewicht</string>
+    <string name="height3rd">Größe</string>
+    <string name="weight3rd">Gewicht</string>
     <string name="dateOfMeasurement">Datum der Messung</string>
     <string name="deleteChildSecurityQuestion">Wollen sie den Eintrag und alle bisher erfassten Daten wirklich unwiderruflich löschen?</string>
-
+    <string name="percentile3">3% Perzentil</string>
+    <string name="percentile15">15% Perzentil</string>
+    <string name="median">Mittelwert</string>
+    <string name="percentile85">85% Perzentil</string>
+    <string name="percentile97">97% Perzentil</string>
 </resources>

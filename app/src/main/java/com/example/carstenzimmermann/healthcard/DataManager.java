@@ -66,12 +66,16 @@ public class DataManager
         nextFreeChildId = 4;
 
         this.measurements = new ArrayList<Measurement>();
-        measurements.add(new Measurement(1,1,1,1,2016,7.0f,7.0f));
-        measurements.add(new Measurement(2,1,2,1,2016,7.5f,7.5f));
-        measurements.add(new Measurement(3,1,3,1,2016,7.8f,7.8f));
-        measurements.add(new Measurement(4,2,4,1,2016,7.9f,7.9f));
-        measurements.add(new Measurement(5,2,5,1,2016,9.0f,9.0f));
-        measurements.add(new Measurement(6,2,6,1,2016,10.8f,10.8f));
+        // add some values for Jonna
+        measurements.add(new Measurement(1,1,29,4,2015,3.2f,0f));
+        measurements.add(new Measurement(2,1,6,5,2015,3.1f,0f));
+        measurements.add(new Measurement(3,1,13,5,2015,3.2f,0f));
+        measurements.add(new Measurement(4,1,20,5,2015,3.5f,0f));
+        measurements.add(new Measurement(5,1,27,5,2015,4.3f,0f));
+        // add some values for Felix
+        measurements.add(new Measurement(6,2,4,1,2016,7.9f,7.9f));
+        measurements.add(new Measurement(7,2,5,1,2016,9.0f,9.0f));
+        measurements.add(new Measurement(8,2,6,1,2016,10.8f,10.8f));
         nextFreeMeasurementId = 7;
     }
 
