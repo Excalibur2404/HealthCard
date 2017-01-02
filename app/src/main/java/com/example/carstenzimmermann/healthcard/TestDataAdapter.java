@@ -129,6 +129,16 @@ public class TestDataAdapter extends BaseAdapter implements ListAdapter
             }
         });
 
+        ImageButton ibShowChart = (ImageButton) row.findViewById(R.id.ibShowChart);
+        ibShowChart.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+                listener.onDisplayChartClicked(child.get_id());
+            }
+        });
+
         return row;
     }
 
@@ -136,8 +146,8 @@ public class TestDataAdapter extends BaseAdapter implements ListAdapter
     {
         public void onEditClicked(int id);
         public void onAddMeasurementClicked(int childId);
-        //TODO: Use the delete click to display a warning message and wait for confirmation
         public void onDeleteClicked(int id);
+        public void onDisplayChartClicked(int childId);
     }
 
 }

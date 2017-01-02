@@ -2,6 +2,8 @@ package com.example.carstenzimmermann.healthcard;
 
 import android.app.DatePickerDialog;
 import android.content.DialogInterface;
+import android.graphics.Color;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AlertDialog;
@@ -13,10 +15,19 @@ import android.widget.DatePicker;
 
 import com.example.carstenzimmermann.healthcard.entities.Child;
 import com.example.carstenzimmermann.healthcard.entities.Measurement;
+import com.example.carstenzimmermann.healthcard.fragments.ChartFragment;
 import com.example.carstenzimmermann.healthcard.fragments.ChildListFragment;
 import com.example.carstenzimmermann.healthcard.fragments.DatePickerFragment;
 import com.example.carstenzimmermann.healthcard.fragments.EditChildFragment;
 import com.example.carstenzimmermann.healthcard.fragments.MeasurementEditFragment;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import lecho.lib.hellocharts.model.Line;
+import lecho.lib.hellocharts.model.LineChartData;
+import lecho.lib.hellocharts.model.PointValue;
+import lecho.lib.hellocharts.view.LineChartView;
 
 public class MainActivity
         extends     AppCompatActivity
@@ -27,6 +38,7 @@ public class MainActivity
 {
     DataManager dataManager;
     public final String CHILD_LIST_FRAGMENT_TAG = "child_list_fragment";
+    public final String CHART_FRAGMENT_TAG = "chart_fragment";
     public final String EDIT_CHILD_FRAGMENT_TAG = "edit_child_fragment";
     public final String MEASUREMENT_EDIT_FRAGMENT_TAG = "measurment_edit_fragment";
     private int dateRequesterId;
@@ -178,6 +190,42 @@ public class MainActivity
                 .setPositiveButton(R.string.yes, dialogClickListener)
                 .setNegativeButton(R.string.no, dialogClickListener)
                 .show();
+    }
+
+    @Override
+    public void onDisplayChartClicked(int childId)
+    {
+        List<PointValue> valueList = new ArrayList<PointValue>();
+        ArrayList<Measurement> measurements = dataManager.getMeasurements(childId);
+        for (Measurement measurement : measurements)
+        {
+            valueList.add(new PointValue(measurement.get_id(), measurement.getWeight()));
+            Log.d(this.getClass().getName(), "New value added: 1, " + measurement.getWeight());
+        }
+        Line line = new Line(valueList).setColor(Color.BLUE);
+        List<Line> lines = new ArrayList<Line>();
+        lines.add(line);
+        LineChartData lineChartData = new LineChartData();
+        lineChartData.setLines(lines);
+
+        FragmentManager fm = getSupportFragmentManager();
+        ChartFragment chartFragment = null;
+        if (fm.findFragmentByTag(CHART_FRAGMENT_TAG) == null)
+        {
+            chartFragment = new ChartFragment();
+        }
+        else
+        {
+            chartFragment = (ChartFragment) fm.findFragmentByTag(CHART_FRAGMENT_TAG);
+        }
+
+        FragmentTransaction fragmentTransaction = fm.beginTransaction();
+        fragmentTransaction.replace(R.id.fragmentContainer, chartFragment, CHART_FRAGMENT_TAG);
+        fragmentTransaction.addToBackStack(null);
+        fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
+        fragmentTransaction.commit();
+        fm.executePendingTransactions();
+        chartFragment.loadData(lineChartData);
     }
 
     @Override

@@ -76,6 +76,12 @@ public class ChildListFragment extends Fragment implements TestDataAdapter.TestD
         listener.onDeleteClicked(id);
     }
 
+    @Override
+    public void onDisplayChartClicked(int childId)
+    {
+        listener.onDisplayChartClicked(childId);
+    }
+
     public void notifyDataSetChanged()
     {
         ListView lvChildren = (ListView)getView().findViewById(R.id.child_list);
@@ -89,5 +95,6 @@ public class ChildListFragment extends Fragment implements TestDataAdapter.TestD
         public void onAddChildClicked();
         public void onAddMeasurementClicked(int childId);
         public void onDeleteClicked(int id);
+        public void onDisplayChartClicked(int childId);
     }
 }

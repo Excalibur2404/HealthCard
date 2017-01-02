@@ -66,10 +66,13 @@ public class DataManager
         nextFreeChildId = 4;
 
         this.measurements = new ArrayList<Measurement>();
-        measurements.add(new Measurement(1,1,1,1,2016,7f,70f));
-        measurements.add(new Measurement(2,1,2,1,2016,7.5f,75f));
-        measurements.add(new Measurement(3,1,3,1,2016,7.8f,76f));
-        nextFreeMeasurementId = 4;
+        measurements.add(new Measurement(1,1,1,1,2016,7.0f,7.0f));
+        measurements.add(new Measurement(2,1,2,1,2016,7.5f,7.5f));
+        measurements.add(new Measurement(3,1,3,1,2016,7.8f,7.8f));
+        measurements.add(new Measurement(4,2,4,1,2016,7.9f,7.9f));
+        measurements.add(new Measurement(5,2,5,1,2016,9.0f,9.0f));
+        measurements.add(new Measurement(6,2,6,1,2016,10.8f,10.8f));
+        nextFreeMeasurementId = 7;
     }
 
     public Child getChildById(int id)
@@ -204,6 +207,19 @@ public class DataManager
                 }
             }
         }
+    }
+
+    public ArrayList<Measurement> getMeasurements(int childID)
+    {
+        ArrayList<Measurement> resultSet = new ArrayList<Measurement>();
+        for (Measurement measurement: measurements)
+        {
+            if (measurement.getChildId() == childID)
+            {
+                resultSet.add(measurement);
+            }
+        }
+        return resultSet;
     }
 }
 
