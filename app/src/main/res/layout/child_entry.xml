@@ -51,7 +51,7 @@
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
         android:layout_toLeftOf="@id/ibAddMeasurement"
-        android:background="@android:drawable/ic_input_add"
+        android:background="@drawable/ic_show_graph"
         android:id="@+id/ibShowChart"/>
 
     <TextView

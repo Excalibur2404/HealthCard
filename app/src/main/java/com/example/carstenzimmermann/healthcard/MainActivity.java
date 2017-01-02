@@ -186,7 +186,7 @@ public class MainActivity
 
         AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(this, R.style.myDialog));
         builder
-                .setMessage("Are you sure to delete the child?")
+                .setMessage(getString(R.string.security_question))
                 .setPositiveButton(R.string.yes, dialogClickListener)
                 .setNegativeButton(R.string.no, dialogClickListener)
                 .show();
@@ -196,36 +196,49 @@ public class MainActivity
     public void onDisplayChartClicked(int childId)
     {
         List<PointValue> valueList = new ArrayList<PointValue>();
-        ArrayList<Measurement> measurements = dataManager.getMeasurements(childId);
-        for (Measurement measurement : measurements)
-        {
-            valueList.add(new PointValue(measurement.get_id(), measurement.getWeight()));
-            Log.d(this.getClass().getName(), "New value added: 1, " + measurement.getWeight());
-        }
-        Line line = new Line(valueList).setColor(Color.BLUE);
-        List<Line> lines = new ArrayList<Line>();
-        lines.add(line);
-        LineChartData lineChartData = new LineChartData();
-        lineChartData.setLines(lines);
+        List<Measurement> measurements = dataManager.getMeasurements(childId);
 
-        FragmentManager fm = getSupportFragmentManager();
-        ChartFragment chartFragment = null;
-        if (fm.findFragmentByTag(CHART_FRAGMENT_TAG) == null)
+        if (measurements.size() == 0)
         {
-            chartFragment = new ChartFragment();
+            //This anonymous class handles the confirmation to delete a child entry
+            DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    switch (which){
+                        case DialogInterface.BUTTON_NEUTRAL:
+                            //do nothing
+                            break;
+                    }
+                }
+            };
+
+            AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(this, R.style.myDialog));
+            builder
+                    .setMessage(getString(R.string.no_chart_data))
+                    .setNeutralButton(R.string.ok, dialogClickListener)
+                    .show();
         }
         else
         {
-            chartFragment = (ChartFragment) fm.findFragmentByTag(CHART_FRAGMENT_TAG);
-        }
+            FragmentManager fm = getSupportFragmentManager();
+            ChartFragment chartFragment = null;
+            if (fm.findFragmentByTag(CHART_FRAGMENT_TAG) == null)
+            {
+                chartFragment = new ChartFragment();
+            }
+            else
+            {
+                chartFragment = (ChartFragment) fm.findFragmentByTag(CHART_FRAGMENT_TAG);
+            }
 
-        FragmentTransaction fragmentTransaction = fm.beginTransaction();
-        fragmentTransaction.replace(R.id.fragmentContainer, chartFragment, CHART_FRAGMENT_TAG);
-        fragmentTransaction.addToBackStack(null);
-        fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
-        fragmentTransaction.commit();
-        fm.executePendingTransactions();
-        chartFragment.loadData(lineChartData);
+            FragmentTransaction fragmentTransaction = fm.beginTransaction();
+            fragmentTransaction.replace(R.id.fragmentContainer, chartFragment, CHART_FRAGMENT_TAG);
+            fragmentTransaction.addToBackStack(null);
+            fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
+            fragmentTransaction.commit();
+            fm.executePendingTransactions();
+            chartFragment.loadData(measurements);
+        }
     }
 
     @Override

@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">HealthCard</string>
-    <string name="security_question_1">Sie sind dabei das Kind </string>
-    <string name="security_question_2"> mit allen Daten zu löschen. Wollen sie fortfahren?</string>
+    <string name="security_question">Sie sind dabei das Kind mit allen Daten zu löschen. Wollen sie fortfahren?</string>
+    <string name="no_chart_data">Es existieren noch keine Daten für dieses Kind.</string>
     <string name="yes">Ja</string>
     <string name="no">Nein</string>
     <string name="male">männlich</string>
