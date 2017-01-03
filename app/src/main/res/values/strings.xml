@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">HealthCard</string>
     <string name="security_question">Sie sind dabei das Kind mit allen Daten zu löschen. Wollen sie fortfahren?</string>
-    <string name="no_chart_data">Es existieren noch keine Daten für dieses Kind.</string>
+    <string name="no_measurement_data">Es existieren noch keine Messdaten für dieses Kind.</string>
     <string name="yes">Ja</string>
     <string name="no">Nein</string>
     <string name="male">männlich</string>
@@ -29,4 +29,6 @@
     <string name="median">Mittelwert</string>
     <string name="percentile85">85% Perzentil</string>
     <string name="percentile97">97% Perzentil</string>
+    <string name="year">Jahr</string>
+    <string name="month">Monat</string>
 </resources>

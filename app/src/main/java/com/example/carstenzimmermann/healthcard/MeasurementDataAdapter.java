@@ -5,6 +5,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.Filter;
+import android.widget.Filterable;
 import android.widget.ListAdapter;
 import android.widget.TextView;
 
@@ -19,19 +21,19 @@ import java.util.Locale;
  * Created by Carsten Zimmermann on 02.01.2017.
  */
 
-public class MeasurementDataAdapter extends BaseAdapter implements ListAdapter
+public class MeasurementDataAdapter extends BaseAdapter implements ListAdapter, Filterable
 {
-    ArrayList<Measurement> measurementList;
+    ArrayList<Measurement> unfilteredMeasurementList;
+    ArrayList<Measurement> filteredMeasurementList;
     Context context;
     IMeasurementDataAdapterListener listener;
     DateFormat df;
-    int childFilter;
+    private MeasurementDataFilter filter = new MeasurementDataFilter();
 
-    public MeasurementDataAdapter(int childId, Context c, IMeasurementDataAdapterListener listener)
+    public MeasurementDataAdapter(Context c, IMeasurementDataAdapterListener listener)
     {
         DataManager dataManager = DataManager.getInstance();
-        this.childFilter = childId;
-        measurementList = dataManager.getMeasurements();
+        unfilteredMeasurementList = dataManager.getMeasurements();
         this.context = c;
         this.listener = listener;
         this.df = DateFormat.getDateInstance(DateFormat.SHORT, Locale.getDefault());
@@ -41,9 +43,9 @@ public class MeasurementDataAdapter extends BaseAdapter implements ListAdapter
     @Override
     public int getCount()
     {
-        if (measurementList != null)
+        if (filteredMeasurementList != null)
         {
-            return measurementList.size();
+            return filteredMeasurementList.size();
         }
         else
         {
@@ -54,9 +56,9 @@ public class MeasurementDataAdapter extends BaseAdapter implements ListAdapter
     @Override
     public Object getItem(int position)
     {
-        if (measurementList != null)
+        if (filteredMeasurementList != null)
         {
-            return measurementList.get(position);
+            return filteredMeasurementList.get(position);
         }
         else
         {
@@ -67,9 +69,9 @@ public class MeasurementDataAdapter extends BaseAdapter implements ListAdapter
     @Override
     public long getItemId(int position)
     {
-        if (measurementList != null)
+        if (filteredMeasurementList != null)
         {
-            return ((Measurement)measurementList.get(position)).get_id();
+            return ((Measurement) filteredMeasurementList.get(position)).get_id();
         }
         else
         {
@@ -91,7 +93,7 @@ public class MeasurementDataAdapter extends BaseAdapter implements ListAdapter
         TextView weight = (TextView) row.findViewById(R.id.tv_weight);
         TextView bmi = (TextView) row.findViewById(R.id.tv_bmi);
 
-        Measurement measurement = measurementList.get(position);
+        Measurement measurement = filteredMeasurementList.get(position);
         Calendar cal = Calendar.getInstance();
         cal.set(Calendar.DAY_OF_MONTH, measurement.getDayOfMonth());
         cal.set(Calendar.MONTH, measurement.getMonth());
@@ -112,13 +114,52 @@ public class MeasurementDataAdapter extends BaseAdapter implements ListAdapter
 
     public void setChildFilter(int childId)
     {
-        childFilter = childId;
-        notifyDataSetChanged();
+        filter.filter(Integer.toString(childId));
+    }
+
+    @Override
+    public Filter getFilter()
+    {
+        return filter;
     }
 
     public interface IMeasurementDataAdapterListener
     {
         public void onEditClicked(int id);
         public void onDeleteClicked(int id);
+    }
+
+    private class MeasurementDataFilter extends Filter
+    {
+        @Override
+        protected FilterResults performFiltering(CharSequence constraint)
+        {
+            FilterResults results = new FilterResults();
+            ArrayList<Measurement> resultList = new ArrayList<Measurement>();
+            for (Measurement measurement:unfilteredMeasurementList)
+            {
+                if ("".compareTo(constraint.toString()) != 0)
+                {
+                    if (Integer.toString(measurement.getChildId()).compareTo(constraint.toString()) == 0)
+                    {
+                        resultList.add(measurement);
+                    }
+                }
+                else
+                {
+                    resultList.add(measurement);
+                }
+            }
+            results.values = resultList;
+            results.count = resultList.size();
+            return results;
+        }
+
+        @Override
+        protected void publishResults(CharSequence constraint, FilterResults results)
+        {
+            filteredMeasurementList = (ArrayList<Measurement>) results.values;
+            notifyDataSetChanged();
+        }
     }
 }

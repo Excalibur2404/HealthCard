@@ -37,7 +37,7 @@ public class MeasurementListFragment extends Fragment implements MeasurementData
     {
         View view = inflater.inflate(R.layout.measurement_list, container, false);
         ListView lv_measurement_list = (ListView) view.findViewById(R.id.lv_measurement_list);
-        lv_measurement_list.setAdapter(new MeasurementDataAdapter(0, getActivity().getApplicationContext(), this));
+        lv_measurement_list.setAdapter(new MeasurementDataAdapter(getActivity().getApplicationContext(), this));
         return view;
     }
 

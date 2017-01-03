@@ -216,7 +216,7 @@ public class MainActivity
 
             AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(this, R.style.myDialog));
             builder
-                    .setMessage(getString(R.string.no_chart_data))
+                    .setMessage(getString(R.string.no_measurement_data))
                     .setNeutralButton(R.string.ok, dialogClickListener)
                     .show();
         }
@@ -246,19 +246,45 @@ public class MainActivity
     @Override
     public void onDisplayMeasurementsClicked(int childId)
     {
-        FragmentManager fm = getSupportFragmentManager();
-        MeasurementListFragment measurementListFragment = (MeasurementListFragment) fm.findFragmentByTag(MEASUREMENT_LIST_FRAGMENT_TAG);
-        if (measurementListFragment == null)
+        Child child = dataManager.getChildById(childId);
+        List<Measurement> measurements = dataManager.getMeasurements(childId);
+
+        if (measurements.size() == 0)
         {
-            measurementListFragment = new MeasurementListFragment();
+            //This anonymous class handles the confirmation to delete a child entry
+            DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    switch (which){
+                        case DialogInterface.BUTTON_NEUTRAL:
+                            //do nothing
+                            break;
+                    }
+                }
+            };
+
+            AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(this, R.style.myDialog));
+            builder
+                    .setMessage(getString(R.string.no_measurement_data))
+                    .setNeutralButton(R.string.ok, dialogClickListener)
+                    .show();
         }
-        FragmentTransaction fragmentTransaction = fm.beginTransaction();
-        fragmentTransaction.replace(R.id.fragmentContainer, measurementListFragment, MEASUREMENT_LIST_FRAGMENT_TAG);
-        fragmentTransaction.addToBackStack(null);
-        fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
-        fragmentTransaction.commit();
-        fm.executePendingTransactions();
-        measurementListFragment.setChildFilter(childId);
+        else
+        {
+            FragmentManager fm = getSupportFragmentManager();
+            MeasurementListFragment measurementListFragment = (MeasurementListFragment) fm.findFragmentByTag(MEASUREMENT_LIST_FRAGMENT_TAG);
+            if (measurementListFragment == null)
+            {
+                measurementListFragment = new MeasurementListFragment();
+            }
+            FragmentTransaction fragmentTransaction = fm.beginTransaction();
+            fragmentTransaction.replace(R.id.fragmentContainer, measurementListFragment, MEASUREMENT_LIST_FRAGMENT_TAG);
+            fragmentTransaction.addToBackStack(null);
+            fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
+            fragmentTransaction.commit();
+            fm.executePendingTransactions();
+            measurementListFragment.setChildFilter(childId);
+        }
     }
 
     @Override
