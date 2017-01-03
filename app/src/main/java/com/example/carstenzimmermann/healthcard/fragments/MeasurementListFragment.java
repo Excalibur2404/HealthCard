@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,8 +20,10 @@ import com.example.carstenzimmermann.healthcard.R;
 
 public class MeasurementListFragment extends Fragment implements MeasurementDataAdapter.IMeasurementDataAdapterListener
 {
-    DataManager dataManager;
-    IMeasurementListFragmentListener listener;
+    private DataManager dataManager;
+    private IMeasurementListFragmentListener listener;
+
+    public static final String KEY_CHILD_ID = "child_id";
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState)
@@ -37,7 +40,10 @@ public class MeasurementListFragment extends Fragment implements MeasurementData
     {
         View view = inflater.inflate(R.layout.measurement_list, container, false);
         ListView lv_measurement_list = (ListView) view.findViewById(R.id.lv_measurement_list);
-        lv_measurement_list.setAdapter(new MeasurementDataAdapter(getActivity().getApplicationContext(), this));
+        int childId = getArguments().getInt(KEY_CHILD_ID);
+        MeasurementDataAdapter adapter = new MeasurementDataAdapter(getActivity().getApplicationContext(), this);
+        adapter.setChildFilter(childId);
+        lv_measurement_list.setAdapter(adapter);
         return view;
     }
 

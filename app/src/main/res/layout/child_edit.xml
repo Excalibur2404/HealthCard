@@ -1,8 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent" >
+
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
                 xmlns:tools="http://schemas.android.com/tools"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <ImageView
@@ -24,14 +28,6 @@
         android:layout_below="@+id/ibPortrait"
         android:layout_alignParentStart="true">
 
-        <TextView
-            android:layout_column="0"
-            android:layout_row="0"
-            android:text="@string/firstName"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/tvFistName"
-            android:textAppearance="@style/TextAppearance.AppCompat.Title"/>
 
         <EditText
             android:layout_column="1"
@@ -44,11 +40,12 @@
 
         <TextView
             android:layout_column="0"
-            android:layout_row="1"
-            android:text="@string/lastName"
+            android:layout_row="0"
+            android:text="@string/firstName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/tvLastName"
+            android:id="@+id/tvFistName"
+            android:labelFor="@id/etFirstName"
             android:textAppearance="@style/TextAppearance.AppCompat.Title"/>
 
         <EditText
@@ -62,6 +59,16 @@
 
         <TextView
             android:layout_column="0"
+            android:layout_row="1"
+            android:text="@string/lastName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/tvLastName"
+            android:labelFor="@id/etLastName"
+            android:textAppearance="@style/TextAppearance.AppCompat.Title"/>
+
+        <TextView
+            android:layout_column="0"
             android:layout_row="2"
             android:text="@string/birthdate"
             android:layout_width="wrap_content"
@@ -70,7 +77,6 @@
             android:textAppearance="@style/TextAppearance.AppCompat.Title"/>
 
         <TextView
-            android:text="TextView"
             android:layout_height="wrap_content"
             android:id="@+id/tvBirthdate"/>
 
@@ -88,8 +94,6 @@
             android:layout_height="wrap_content">
 
             <RadioButton
-                android:layout_column="1"
-                android:layout_row="3"
                 android:text="@string/female"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -97,20 +101,17 @@
                 android:layout_weight="1"/>
 
             <RadioButton
-                android:layout_column="1"
-                android:layout_row="4"
                 android:text="@string/male"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/rbMale"
-                android:layout_below="@id/rbFemale"
-                android:layout_toRightOf="@id/tvSex"
                 android:layout_weight="1"/>
         </RadioGroup>
 
     </GridLayout>
 
     <LinearLayout
+        style="?android:attr/buttonBarStyle"
         android:orientation="horizontal"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -118,6 +119,7 @@
         android:layout_centerInParent="true">
 
         <Button
+            style="?android:attr/buttonBarButtonStyle"
             android:text="@string/cancel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -125,13 +127,13 @@
             android:layout_weight="1"/>
 
         <Button
+            style="?android:attr/buttonBarButtonStyle"
             android:text="@string/save"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/btSave"
-            android:layout_below="@id/rbMale"
-            android:layout_toRightOf="@id/btCancel"
             android:layout_weight="1"/>
     </LinearLayout>
 
 </RelativeLayout>
+</ScrollView>

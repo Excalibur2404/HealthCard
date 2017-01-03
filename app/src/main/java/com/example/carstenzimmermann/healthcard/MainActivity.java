@@ -238,8 +238,6 @@ public class MainActivity
             fragmentTransaction.addToBackStack(null);
             fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
             fragmentTransaction.commit();
-            fm.executePendingTransactions();
-            //chartFragment.loadData(measurements, child.getFirstName() + " " + child.getLastName(), child.getSex(), child.getBirthdateDayOfMonth(), child.getBirthdateMonth(), child.getBirthdateYear());
         }
     }
 
@@ -276,14 +274,15 @@ public class MainActivity
             if (measurementListFragment == null)
             {
                 measurementListFragment = new MeasurementListFragment();
+                Bundle bundle = new Bundle();
+                bundle.putInt(MeasurementListFragment.KEY_CHILD_ID, childId);
+                measurementListFragment.setArguments(bundle);
             }
             FragmentTransaction fragmentTransaction = fm.beginTransaction();
             fragmentTransaction.replace(R.id.fragmentContainer, measurementListFragment, MEASUREMENT_LIST_FRAGMENT_TAG);
             fragmentTransaction.addToBackStack(null);
             fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
             fragmentTransaction.commit();
-            fm.executePendingTransactions();
-            measurementListFragment.setChildFilter(childId);
         }
     }
 
