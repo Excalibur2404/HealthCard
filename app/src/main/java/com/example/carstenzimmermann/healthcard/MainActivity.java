@@ -2,8 +2,6 @@ package com.example.carstenzimmermann.healthcard;
 
 import android.app.DatePickerDialog;
 import android.content.DialogInterface;
-import android.graphics.Color;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AlertDialog;
@@ -22,13 +20,7 @@ import com.example.carstenzimmermann.healthcard.fragments.EditChildFragment;
 import com.example.carstenzimmermann.healthcard.fragments.MeasurementEditFragment;
 import com.example.carstenzimmermann.healthcard.fragments.MeasurementListFragment;
 
-import java.util.ArrayList;
 import java.util.List;
-
-import lecho.lib.hellocharts.model.Line;
-import lecho.lib.hellocharts.model.LineChartData;
-import lecho.lib.hellocharts.model.PointValue;
-import lecho.lib.hellocharts.view.LineChartView;
 
 public class MainActivity
         extends     AppCompatActivity
@@ -51,17 +43,17 @@ public class MainActivity
     {
         super.onCreate(savedInstanceState);
 
-        dataManager = DataManager.getInstance();
+        if (dataManager == null) dataManager = DataManager.getInstance();
         setContentView(R.layout.activity_main);
         FragmentManager fm = getSupportFragmentManager();
         ChildListFragment childListFragment = (ChildListFragment)fm.findFragmentByTag(CHILD_LIST_FRAGMENT_TAG);
         if (childListFragment == null)
         {
             childListFragment = new ChildListFragment();
+            FragmentTransaction fta = fm.beginTransaction();
+            fta.replace(R.id.fragmentContainer, childListFragment, CHILD_LIST_FRAGMENT_TAG);
+            fta.commit();
         }
-        FragmentTransaction fta = fm.beginTransaction();
-        fta.add(R.id.fragmentContainer, childListFragment, CHILD_LIST_FRAGMENT_TAG);
-        fta.commit();
     }
 
     @Override
@@ -227,6 +219,14 @@ public class MainActivity
             if (fm.findFragmentByTag(CHART_FRAGMENT_TAG) == null)
             {
                 chartFragment = new ChartFragment();
+                Bundle bundle = new Bundle();
+                bundle.putString(ChartFragment.KEY_GRAPH_LABEL, child.getFirstName() + " " + child.getLastName());
+                bundle.putInt(ChartFragment.KEY_CHILD_ID, child.get_id());
+                bundle.putInt(ChartFragment.KEY_BIRTHDATE_YEAR, child.getBirthdateYear());
+                bundle.putInt(ChartFragment.KEY_BIRTHDATE_MONTH, child.getBirthdateMonth());
+                bundle.putInt(ChartFragment.KEY_BIRTHDATE_DAY_OF_MONTH, child.getBirthdateDayOfMonth());
+                bundle.putInt(ChartFragment.KEY_SEX, child.getSex());
+                chartFragment.setArguments(bundle);
             }
             else
             {
@@ -239,7 +239,7 @@ public class MainActivity
             fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
             fragmentTransaction.commit();
             fm.executePendingTransactions();
-            chartFragment.loadData(measurements, child.getFirstName() + " " + child.getLastName(), child.getSex(), child.getBirthdateDayOfMonth(), child.getBirthdateMonth(), child.getBirthdateYear());
+            //chartFragment.loadData(measurements, child.getFirstName() + " " + child.getLastName(), child.getSex(), child.getBirthdateDayOfMonth(), child.getBirthdateMonth(), child.getBirthdateYear());
         }
     }
 

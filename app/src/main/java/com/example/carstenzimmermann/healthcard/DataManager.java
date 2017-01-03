@@ -215,6 +215,7 @@ public class DataManager
 
     public ArrayList<Measurement> getMeasurements(int childID)
     {
+        //todo: Implement sorting
         ArrayList<Measurement> resultSet = new ArrayList<Measurement>();
         for (Measurement measurement: measurements)
         {

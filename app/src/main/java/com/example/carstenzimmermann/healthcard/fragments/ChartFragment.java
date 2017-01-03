@@ -9,13 +9,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.example.carstenzimmermann.healthcard.DynamicTimeAxisValueFormater;
+import com.example.carstenzimmermann.healthcard.DataManager;
 import com.example.carstenzimmermann.healthcard.R;
 import com.example.carstenzimmermann.healthcard.entities.Measurement;
 import com.example.carstenzimmermann.healthcard.entities.PercentileValue;
 import com.example.carstenzimmermann.healthcard.entities.PercentilesRepository;
 import com.github.mikephil.charting.charts.LineChart;
-import com.github.mikephil.charting.components.Description;
 import com.github.mikephil.charting.components.LimitLine;
 import com.github.mikephil.charting.components.XAxis;
 import com.github.mikephil.charting.data.Entry;
@@ -33,31 +32,62 @@ import java.util.List;
 
 public class ChartFragment extends Fragment
 {
+    public static final String KEY_GRAPH_LABEL = "graph_label";
+    public static final String KEY_SEX = "sex";
+    public static final String KEY_BIRTHDATE_DAY_OF_MONTH = "birthdate_day_of_month";
+    public static final String KEY_BIRTHDATE_MONTH = "birthdate_month";
+    public static final String KEY_BIRTHDATE_YEAR = "birthdate_year";
+    public static final String KEY_CHILD_ID = "child_id";
+
+    private LineChart chart;
+    private String graphLabel;
+    private int sex;
+    private int birthdateDayOfMonth;
+    private int birthdateMonth;
+    private int birthdateYear;
+    private int childId;
+    private DataManager dataManager;
+    private List<Measurement> measurementsList;
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState)
     {
+        Log.d(this.getClass().getName(), "Executing onCreate()...");
         super.onCreate(savedInstanceState);
+        dataManager = DataManager.getInstance();
     }
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState)
     {
+        Log.d(this.getClass().getName(), "Executing onCreateView()...");
         View view = inflater.inflate(R.layout.chart_mp_chart, container, false);
-        LineChart chart = (LineChart) view.findViewById(R.id.mp_chart);
-        XAxis xAxis = chart.getXAxis();
-        xAxis.setValueFormatter(new DynamicTimeAxisValueFormater());
+        chart = (LineChart) view.findViewById(R.id.mp_chart);
+
+        // get the criteria for loading the data from the bundle
+        Bundle bundle = this.getArguments();
+        graphLabel = bundle.getString(KEY_GRAPH_LABEL);
+        sex = bundle.getInt(KEY_SEX);
+        birthdateDayOfMonth = bundle.getInt(KEY_BIRTHDATE_DAY_OF_MONTH);
+        birthdateMonth = bundle.getInt(KEY_BIRTHDATE_MONTH);
+        birthdateYear = bundle.getInt(KEY_BIRTHDATE_YEAR);
+        childId = bundle.getInt(KEY_CHILD_ID);
+
+        //load the data:
+        measurementsList = dataManager.getMeasurements(childId);
+        loadData(measurementsList, graphLabel, sex, birthdateDayOfMonth, birthdateMonth, birthdateYear);
         return view;
     }
 
-    public void loadData(List<Measurement> measurementsList,
+    private void loadData(List<Measurement> measurementsList,
                          String graphLabel,
                          int sex,
                          int birthdateDayOfMonth,
                          int birthdateMonth,
                          int birthdateYear)
     {
-        LineChart chart = (LineChart) getView().findViewById(R.id.mp_chart); //the chart object containing all lines
+        Log.d(this.getClass().getName(), "Executing loadData()...");
         List<ILineDataSet> lines = new ArrayList<ILineDataSet>(); // a list containing all the lines. This is handed over to the chart object
         LineDataSet lineData3Percentile = null; // an object grouping all values belonging to the 3rd percentile
         LineDataSet lineData15Percentile = null; // an object grouping all values belonging to the 15th percentile
@@ -94,6 +124,7 @@ public class ChartFragment extends Fragment
                 cal.add(Calendar.MONTH, percentileValue.getDistance());
             }
             offsetTimestamp = cal.getTimeInMillis() - birthdateTimestamp;
+            Log.d(this.getClass().getName(), "OffsetTimestamp is " + offsetTimestamp);
 
             entry = new Entry();
             entry.setX(offsetTimestamp);
@@ -156,6 +187,9 @@ public class ChartFragment extends Fragment
         lineData97Percentile.setMode(LineDataSet.Mode.CUBIC_BEZIER);
         lines.add(lineData97Percentile);
 
+        float xMaxValue = 0f;
+        float yMaxValue = 0f;
+
         // draw the line of the child
         List<Entry> entries = new ArrayList<Entry>();
         for (Measurement measurement:measurementsList)
@@ -169,6 +203,8 @@ public class ChartFragment extends Fragment
             entry.setX(cal.getTimeInMillis() - birthdateTimestamp);
             Log.d(this.getClass().getName(), "X-Value is " + entry.getX());
             entry.setY(measurement.getWeight());
+            xMaxValue = entry.getX();
+            yMaxValue = entry.getY();
             entries.add(entry);
         }
 
@@ -183,19 +219,25 @@ public class ChartFragment extends Fragment
         XAxis xAxis = chart.getXAxis();
         xAxis.setDrawGridLines(false);
         xAxis.setDrawLimitLinesBehindData(true);
-        xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
-        xAxis.setGranularity(604800000f);
-        xAxis.setGranularityEnabled(true);
         xAxis.setDrawLabels(false);
         drawLimitLines(xAxis, birthdateTimestamp);
         chart.getAxisRight().setEnabled(false);
         chart.getLegend().setEnabled(false);
         chart.setDescription(null);
+
+        //determine the zoom factor:
+        //todo: set a proper initial zoom
+        /*float xZoomFactor = 157852800000f / xMaxValue;
+        float yZoomFactor = 23.8f / 5.6f;
+        chart.zoom(xZoomFactor, yZoomFactor, 0f, 0f);*/
+
+        // update rhe chart
         chart.invalidate();
     }
 
     private void drawLimitLines(XAxis xAxis, long baseDateTimestamp)
     {
+        Log.d(this.getClass().getName(), "Executing drawLimitLines()...");
         int textColor = Color.rgb(80, 80, 80);
         int lineColor = Color.rgb(200, 200, 200);
         float textSize = 9f;
