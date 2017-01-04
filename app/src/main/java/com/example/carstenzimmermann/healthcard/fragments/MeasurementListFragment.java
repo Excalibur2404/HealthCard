@@ -2,12 +2,14 @@ package com.example.carstenzimmermann.healthcard.fragments;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.provider.ContactsContract;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.example.carstenzimmermann.healthcard.DataManager;
@@ -17,7 +19,8 @@ import com.example.carstenzimmermann.healthcard.R;
 /**
  * Created by Carsten Zimmermann on 02.01.2017.
  */
-
+    //todo: Add header line to list
+    //todo: Make date be displayed according to os settings (year is still displayed with two characters instead of 4 as defined in the settings)
 public class MeasurementListFragment extends Fragment implements MeasurementDataAdapter.IMeasurementDataAdapterListener
 {
     private DataManager dataManager;
@@ -32,6 +35,7 @@ public class MeasurementListFragment extends Fragment implements MeasurementData
         Activity activity = getActivity();
         if (activity instanceof IMeasurementListFragmentListener)
             listener = (IMeasurementListFragmentListener) activity;
+        dataManager = DataManager.getInstance();
     }
 
     @Nullable
@@ -57,13 +61,6 @@ public class MeasurementListFragment extends Fragment implements MeasurementData
     public void onDeleteClicked(int id)
     {
         //todo: implement method
-    }
-
-    public void setChildFilter(int childId)
-    {
-        ListView lv_measurement_list = (ListView) getView().findViewById(R.id.lv_measurement_list);
-        MeasurementDataAdapter adapter = (MeasurementDataAdapter)lv_measurement_list.getAdapter();
-        adapter.setChildFilter(childId);
     }
 
     public interface IMeasurementListFragmentListener

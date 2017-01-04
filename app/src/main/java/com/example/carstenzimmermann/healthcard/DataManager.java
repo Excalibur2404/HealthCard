@@ -231,5 +231,16 @@ public class DataManager
     {
         return measurements;
     }
-}
 
+    public void deleteMeasurement (int id)
+    {
+        for (Measurement measurement:measurements)
+        {
+            if (measurement.get_id() == id)
+            {
+                measurements.remove(measurements.indexOf(measurement));
+                return;
+            }
+        }
+    }
+}

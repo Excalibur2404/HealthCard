@@ -1,40 +1,79 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:tools="http://schemas.android.com/tools"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="48dp">
 
     <TextView
-        android:text="TextView"
-        android:layout_width="wrap_content"
+        android:text=""
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
-        android:id="@+id/tv_measurement_date"/>
+        android:id="@+id/tv_measurement_date"
+        android:textAppearance="@android:style/TextAppearance.Material.Medium"
+        android:textColor="@android:color/black"
+        android:layout_width="110dp"
+        android:layout_marginLeft="5dp"
+        />
 
     <TextView
-        android:text="TextView"
-        android:layout_width="wrap_content"
+        android:text=""
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
-        android:layout_toRightOf="@id/tv_measurement_date"
-        android:layout_margin="5sp"
-        android:id="@+id/tv_weight"/>
+        android:layout_toEndOf="@id/tv_measurement_date"
+        android:id="@+id/tv_weight"
+        android:textAppearance="@android:style/TextAppearance.Material.Medium"
+        android:textColor="@android:color/black"
+        android:textAlignment="viewEnd"
+        android:layout_marginLeft="5dp"
+        android:layout_width="50dp"/>
 
     <TextView
-        android:text="TextView"
-        android:layout_width="wrap_content"
+        android:text="@string/kg"
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
-        android:layout_toRightOf="@id/tv_weight"
-        android:layout_margin="5sp"
-        android:id="@+id/tv_height"/>
+        android:layout_toEndOf="@id/tv_weight"
+        android:id="@+id/tv_weightUnitOfMeasurement"
+        android:textAppearance="@android:style/TextAppearance.Material.Medium"
+        android:textColor="@android:color/black"
+        android:textAlignment="viewStart"
+        android:layout_width="30dp"
+        android:layout_marginLeft="3dp"/>
 
     <TextView
-        android:text="TextView"
-        android:layout_width="wrap_content"
+        android:text=""
         android:layout_height="wrap_content"
         android:layout_centerVertical="true"
-        android:layout_toRightOf="@id/tv_height"
-        android:layout_margin="5sp"
-        android:id="@+id/tv_bmi"/>
+        android:layout_toEndOf="@id/tv_weightUnitOfMeasurement"
+        android:id="@+id/tv_height"
+        android:textAppearance="@android:style/TextAppearance.Material.Medium"
+        android:textColor="@android:color/black"
+        android:textAlignment="viewEnd"
+        android:layout_marginLeft="5dp"
+        android:layout_width="50dp"/>
+
+
+    <TextView
+        android:text="@string/cm"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_toEndOf="@id/tv_height"
+        android:id="@+id/tv_heightUnitOfMeasurement"
+        android:textAppearance="@android:style/TextAppearance.Material.Medium"
+        android:textColor="@android:color/black"
+        android:textAlignment="viewStart"
+        android:layout_width="30dp"
+        android:layout_marginLeft="3dp"/>
+
+    <TextView
+        android:text=""
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_toEndOf="@id/tv_heightUnitOfMeasurement"
+        android:id="@+id/tv_bmi"
+        android:textAppearance="@android:style/TextAppearance.Material.Medium"
+        android:textColor="@android:color/black"
+        android:textAlignment="viewEnd"
+        android:layout_marginLeft="5dp"
+        android:layout_width="50dp"/>
 
 </RelativeLayout>

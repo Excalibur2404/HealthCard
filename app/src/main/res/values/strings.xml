@@ -31,4 +31,6 @@
     <string name="percentile97">97% Perzentil</string>
     <string name="year">Jahr</string>
     <string name="month">Monat</string>
+    <string name="kg">kg</string>
+    <string name="cm">cm</string>
 </resources>
