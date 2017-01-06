@@ -67,16 +67,30 @@ public class DataManager
 
         this.measurements = new ArrayList<Measurement>();
         // add some values for Jonna
-        measurements.add(new Measurement(1,1,29,4,2015,3.2f,0f));
-        measurements.add(new Measurement(2,1,6,5,2015,3.1f,0f));
-        measurements.add(new Measurement(3,1,13,5,2015,3.2f,0f));
-        measurements.add(new Measurement(4,1,20,5,2015,3.5f,0f));
-        measurements.add(new Measurement(5,1,27,5,2015,4.3f,0f));
+//                                       ID   ChildID  Day  Month  Year  Weight  Height
+        measurements.add(new Measurement(1   ,1       ,2   ,5     ,2015 ,3.2f   ,0.53f));
+        measurements.add(new Measurement(2   ,1       ,9   ,6     ,2015 ,3.7f   ,0.57f));
+        measurements.add(new Measurement(3   ,1       ,2   ,7     ,2015 ,4.6f   ,0.59f));
+        measurements.add(new Measurement(4   ,1       ,9   ,9     ,2015 ,7.1f   ,0.65f));
+        measurements.add(new Measurement(5   ,1       ,10  ,11    ,2015 ,8.4f   ,0.69f));
+        measurements.add(new Measurement(6   ,1       ,9   ,12    ,2015 ,8.6f   ,0.70f));
+        measurements.add(new Measurement(7   ,1       ,12  ,1     ,2016 ,8.7f   ,0.74f));
+        measurements.add(new Measurement(8   ,1       ,18  ,2     ,2016 ,8.8f   ,0.0f));
+        measurements.add(new Measurement(9   ,1       ,2   ,3     ,2016 ,9.0f   ,0.0f));
+        measurements.add(new Measurement(10  ,1       ,13  ,4     ,2016 ,9.9f   ,0.77f));
+        measurements.add(new Measurement(11  ,1       ,19  ,4     ,2016 ,9.9f   ,0.775f));
+        measurements.add(new Measurement(12  ,1       ,21  ,7     ,2016 ,10.8f  ,0.82f));
+        measurements.add(new Measurement(13  ,1       ,9   ,8     ,2016 ,10.7f  ,0.0f));
+        measurements.add(new Measurement(14  ,1       ,23  ,9     ,2016 ,11f    ,0.85f));
+        measurements.add(new Measurement(15  ,1       ,9   ,11    ,2016 ,11.5f  ,0.86f));
+        measurements.add(new Measurement(16  ,1       ,3   ,12    ,2016 ,11.6f  ,0.86f));
+        measurements.add(new Measurement(17  ,1       ,15  ,12    ,2016 ,11.3f  ,0.86f));
+
         // add some values for Felix
-        measurements.add(new Measurement(6,2,4,1,2016,7.9f,7.9f));
-        measurements.add(new Measurement(7,2,5,1,2016,9.0f,9.0f));
-        measurements.add(new Measurement(8,2,6,1,2016,10.8f,10.8f));
-        nextFreeMeasurementId = 9;
+        measurements.add(new Measurement(18,2,4,1,2016,7.9f,7.9f));
+        measurements.add(new Measurement(19,2,5,1,2016,9.0f,9.0f));
+        measurements.add(new Measurement(20,2,6,1,2016,10.8f,10.8f));
+        nextFreeMeasurementId = 21;
     }
 
     public Child getChildById(int id)

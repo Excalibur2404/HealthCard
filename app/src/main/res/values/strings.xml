@@ -29,8 +29,8 @@
     <string name="median">Mittelwert</string>
     <string name="percentile85">85% Perzentil</string>
     <string name="percentile97">97% Perzentil</string>
-    <string name="year">Jahr</string>
-    <string name="month">Monat</string>
+    <string name="year">J</string>
+    <string name="month">M</string>
     <string name="kg">kg</string>
     <string name="cm">cm</string>
     <string name="BMI">BMI</string>

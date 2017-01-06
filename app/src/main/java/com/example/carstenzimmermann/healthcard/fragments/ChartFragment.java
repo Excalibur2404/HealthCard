@@ -153,35 +153,35 @@ public class ChartFragment extends Fragment
         }
 
         lineData3Percentile = new LineDataSet(percentile3entries, getString(R.string.percentile3));
-        lineData3Percentile.setColor(Color.rgb(255, 0, 0));
+        lineData3Percentile.setColor(Color.rgb(255, 0, 0), 60);
         lineData3Percentile.setDrawValues(false);
         lineData3Percentile.setDrawCircles(false);
         lineData3Percentile.setMode(LineDataSet.Mode.CUBIC_BEZIER);
         lines.add(lineData3Percentile);
 
         lineData15Percentile = new LineDataSet(percentile15entries, getString(R.string.percentile15));
-        lineData15Percentile.setColor(Color.rgb(255, 114, 0));
+        lineData15Percentile.setColor(Color.rgb(255, 114, 0), 60);
         lineData15Percentile.setDrawValues(false);
         lineData15Percentile.setDrawCircles(false);
         lineData15Percentile.setMode(LineDataSet.Mode.CUBIC_BEZIER);
         lines.add(lineData15Percentile);
 
         lineDataMedian = new LineDataSet(medianEntries, getString(R.string.median));
-        lineDataMedian.setColor(Color.rgb(0, 175, 0));
+        lineDataMedian.setColor(Color.rgb(0, 175, 0), 60);
         lineDataMedian.setDrawValues(false);
         lineDataMedian.setDrawCircles(false);
         lineDataMedian.setMode(LineDataSet.Mode.CUBIC_BEZIER);
         lines.add(lineDataMedian);
 
         lineData85Percentile = new LineDataSet(percentile85entries, getString(R.string.percentile85));
-        lineData85Percentile.setColor(Color.rgb(255, 114, 0));
+        lineData85Percentile.setColor(Color.rgb(255, 114, 0), 60);
         lineData85Percentile.setDrawValues(false);
         lineData85Percentile.setDrawCircles(false);
         lineData85Percentile.setMode(LineDataSet.Mode.CUBIC_BEZIER);
         lines.add(lineData85Percentile);
 
         lineData97Percentile = new LineDataSet(percentile97entries, getString(R.string.percentile97));
-        lineData97Percentile.setColor(Color.rgb(255, 0, 0));
+        lineData97Percentile.setColor(Color.rgb(255, 0, 0), 60);
         lineData97Percentile.setDrawValues(false);
         lineData97Percentile.setDrawCircles(false);
         lineData97Percentile.setMode(LineDataSet.Mode.CUBIC_BEZIER);
@@ -210,6 +210,9 @@ public class ChartFragment extends Fragment
 
         LineDataSet lineDataSet = new LineDataSet(entries, graphLabel);
         lineDataSet.setColor(Color.BLUE);
+        lineDataSet.setCircleColor(Color.BLUE);
+        lineDataSet.setCircleColorHole(Color.BLUE);
+        lineDataSet.setCircleRadius(2f);
         lineDataSet.setMode(LineDataSet.Mode.CUBIC_BEZIER);
         lines.add(lineDataSet);
 
@@ -218,6 +221,7 @@ public class ChartFragment extends Fragment
         chart.setPinchZoom(true);
         XAxis xAxis = chart.getXAxis();
         xAxis.setDrawGridLines(false);
+
         xAxis.setDrawLimitLinesBehindData(true);
         xAxis.setDrawLabels(false);
         drawLimitLines(xAxis, birthdateTimestamp);
@@ -225,7 +229,22 @@ public class ChartFragment extends Fragment
         chart.getLegend().setEnabled(false);
         chart.setDescription(null);
 
+        // Zoomfaktorberechnung für Y-Achse:
+        // 1. Suche den zeitlich letzten Y-Wert der Kindsdaten. Suche bis zu diesem Zeitpunkt nach dem maximalen Wert in der
+        //    Messwertdatenkurze und dem 97%-Perzentil und speichere den gefundenen Y-Wert als "yCurrent".
+        // 2. Suche den maximalen Y-Wert in der Kindsdatenkurve und dem 97% Perzentil über alle X-Werte und speichere ihn als "yMax".
+        // 3. Der Faktor ist gleich yMax / yCurrent.
+
+        // Zoomfaktorberechnung für X-Achse:
+        // 1. Suche den zeitlich letzten Y-Wert des Kindes und speichere dessen X-Wert als "xCurrent".
+        // 2. Suche den zeitlich letzten X-Wert über alle Daten und speichere ihn unter "xMax".
+        // 4. Der Faktor ist gleich xMax / xCurrent.
+
+
         //determine the zoom factor:
+        float zoomFactorX = getZoomFactorX(percentile97entries, entries);
+        float zoomFactorY = getZoomFactorY(percentile97entries, entries);
+        chart.zoom(zoomFactorX, zoomFactorY, 0f, 0f);
         //todo: set a proper initial zoom
         /*float xZoomFactor = 157852800000f / xMaxValue;
         float yZoomFactor = 23.8f / 5.6f;
@@ -233,6 +252,60 @@ public class ChartFragment extends Fragment
 
         // update rhe chart
         chart.invalidate();
+    }
+
+    private float getZoomFactorX(List<Entry> percentil97Entries, List<Entry> measurementEntries)
+    {
+        // 1. Suche den zeitlich letzten Y-Wert des Kindes und speichere dessen X-Wert als "xCurrent".
+        float xCurrent = measurementEntries.get(measurementEntries.size()-1).getX();
+
+        // 2. Suche den zeitlich letzten X-Wert über alle Daten und speichere ihn unter "xMax".
+        float temp1 = measurementEntries.get(measurementEntries.size()-1).getX();
+        float temp2 = percentil97Entries.get(percentil97Entries.size()-1).getX();
+        float xMax = temp1 > temp2 ? temp1 : temp2;
+
+        // 3. Der Faktor ist gleich xMax / xCurrent.
+        return xMax / xCurrent;
+    }
+
+    private float getZoomFactorY(List<Entry> percentil97Entries, List<Entry> measurementEntries)
+    {
+        // 1. Suche den zeitlich letzten Y-Wert der Kindsdaten.
+        float xMaxMeasurements = measurementEntries.get(measurementEntries.size()-1).getX();
+
+        // 2. Suche bis zu diesem Zeitpunkt nach dem maximalen Wert in der
+        //    Messwertdatenkurve und dem 97%-Perzentil und speichere den gefundenen Y-Wert als "yCurrent".
+        float yCurrent = 0f;
+        for (Entry entry:percentil97Entries)
+        {
+            if (entry.getX() <= xMaxMeasurements)
+            {
+                if (entry.getY() > yCurrent) yCurrent = entry.getY();
+            }
+            else break;
+        }
+        for (Entry entry:measurementEntries)
+        {
+            if (entry.getX() <= xMaxMeasurements)
+            {
+                if (entry.getY() > yCurrent) yCurrent = entry.getY();
+            }
+            else break;
+        }
+
+        // 3. Suche den maximalen Y-Wert in der Kindsdatenkurve und dem 97% Perzentil über alle X-Werte und speichere ihn als "yMax".
+        float yMax = 0f;
+        for (Entry entry:percentil97Entries)
+        {
+            if (entry.getY() > yMax) yMax = entry.getY();
+        }
+        for (Entry entry:measurementEntries)
+        {
+            if (entry.getY() > yMax) yMax = entry.getY();
+        }
+
+        // 5. Der Faktor ist gleich yMax / yCurrent.
+        return yMax / yCurrent;
     }
 
     private void drawLimitLines(XAxis xAxis, long baseDateTimestamp)

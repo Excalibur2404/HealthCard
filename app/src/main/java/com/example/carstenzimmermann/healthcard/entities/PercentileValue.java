@@ -56,11 +56,11 @@ public class PercentileValue
         this.weight85th = weight85th;
         this.weight97th = weight97th;
 
-        this.height3rd = height3rd;
-        this.height15th = height15th;
-        this.heightMed = heightMed;
-        this.height85th = height85th;
-        this.height97th = height97th;
+        this.height3rd = height3rd / 100;
+        this.height15th = height15th / 100;
+        this.heightMed = heightMed / 100;
+        this.height85th = height85th / 100;
+        this.height97th = height97th / 100;
 
         this.bmi3rd = bmi3rd;
         this.bmi15th = bmi15th;

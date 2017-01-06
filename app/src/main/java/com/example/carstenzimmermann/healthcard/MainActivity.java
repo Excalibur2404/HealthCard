@@ -71,12 +71,6 @@ public class MainActivity
     }
 
     @Override
-    public void onRestoreInstanceState(Bundle savedInstanceState, PersistableBundle persistentState)
-    {
-        super.onRestoreInstanceState(savedInstanceState, persistentState);
-    }
-
-    @Override
     public void editChild(int id)
     {
         FragmentManager fm = getSupportFragmentManager();
@@ -223,7 +217,7 @@ public class MainActivity
 
         if (measurements.size() == 0)
         {
-            //This anonymous class handles the confirmation to delete a child entry
+            //This anonymous class handles the confirmation click on the warning dialog
             DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {

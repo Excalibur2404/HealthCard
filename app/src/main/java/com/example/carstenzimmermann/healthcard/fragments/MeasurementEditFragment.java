@@ -127,25 +127,25 @@ public class MeasurementEditFragment extends Fragment
             }
         });
 
-//        etWeight.setOnKeyListener(new View.OnKeyListener()
-//        {
-//            @Override
-//            public boolean onKey(View v, int keyCode, KeyEvent event)
-//            {
-//                updateBMI();
-//                return true;
-//            }
-//        });
-//
-//        etHeight.setOnKeyListener(new View.OnKeyListener()
-//        {
-//            @Override
-//            public boolean onKey(View v, int keyCode, KeyEvent event)
-//            {
-//                updateBMI();
-//                return true;
-//            }
-//        });
+        etWeight.setOnKeyListener(new View.OnKeyListener()
+        {
+            @Override
+            public boolean onKey(View v, int keyCode, KeyEvent event)
+            {
+                updateBMI();
+                return false;
+            }
+        });
+
+        etHeight.setOnKeyListener(new View.OnKeyListener()
+        {
+            @Override
+            public boolean onKey(View v, int keyCode, KeyEvent event)
+            {
+                updateBMI();
+                return false;
+            }
+        });
 
 
         return view;
@@ -153,21 +153,34 @@ public class MeasurementEditFragment extends Fragment
 
     private void updateBMI()
     {
-//        EditText etHeight = (EditText) getView().findViewById(R.id.etHeight);
-//        EditText etWeight = (EditText) getView().findViewById(R.id.etWeight);
-//        EditText etBMI = (EditText) getView().findViewById(R.id.etBmi);
-//        float weight = 0f;
-//        float height = 0f;
-//        if (etWeight.getText() != null && etWeight.getText().toString() != "") weight = Float.parseFloat(etWeight.getText().toString());
-//        if (etHeight.getText() != null && etHeight.getText().toString() != "") height = Float.parseFloat(etHeight.getText().toString());
-//        if (weight == 0f || height == 0f)
-//        {
-//            etBMI.setText("");
-//        }
-//        else
-//        {
-//            etBMI.setText(Float.toString(Math.round(weight / height * height * 100) / 100));
-//        }
+        EditText etHeight = (EditText) getView().findViewById(R.id.etHeight);
+        EditText etWeight = (EditText) getView().findViewById(R.id.etWeight);
+        EditText etBMI = (EditText) getView().findViewById(R.id.etBmi);
+        float weight = 0f;
+        float height = 0f;
+        try
+        {
+            if (etWeight.getText() != null) weight = Float.parseFloat(etWeight.getText().toString());
+            if (etHeight.getText() != null) height = Float.parseFloat(etHeight.getText().toString());
+        }
+        catch (NumberFormatException e)
+        {
+            // stop updating and return, try again after next edit
+            Log.d(this.getClass().getName(), "Parsing weight or height failed. Stopping update of BMI.");
+            return;
+        }
+
+        if (weight != 0f && height != 0f)
+        {
+            Log.d(this.getClass().getName(), "Updating BMI. Weight is " + weight + " and height is " +
+                    height + ". Weight / height * height is " + (weight / height * height));
+            etBMI.setText(Float.toString(Math.round(weight / (height * height) * 100) / 100));
+        }
+        else
+        {
+            Log.d(this.getClass().getName(), "One number is 0. Setting empty String as BMI.");
+            etBMI.setText("");
+        }
     }
 
     private void saveMeasurements()
@@ -199,7 +212,7 @@ public class MeasurementEditFragment extends Fragment
 
         if ("".equals(etHeight.getText().toString()) == false)
         {
-            measurement.setHight(Float.valueOf(etHeight.getText().toString()));
+            measurement.setHeight(Float.valueOf(etHeight.getText().toString()));
         }
         if ("".equals(etWeight.getText().toString()) == false)
         {
@@ -215,7 +228,7 @@ public class MeasurementEditFragment extends Fragment
                         "month = '" + measurement.getMonth() + "', " +
                         "year = '" + measurement.getYear() + "', " +
                         "weight = '" + measurement.getWeight() + "', " +
-                        "height = '" + measurement.getHight() + "'.");
+                        "height = '" + measurement.getHeight() + "'.");
     }
 
     public void clearMeasurement()
@@ -247,7 +260,7 @@ public class MeasurementEditFragment extends Fragment
             cal.set(Calendar.MONTH, measurement.getMonth());
             cal.set(Calendar.YEAR, measurement.getYear());
             tvDate.setText(df.format(cal.getTime()));
-            etHeight.setText(Float.toString(measurement.getHight()));
+            etHeight.setText(Float.toString(measurement.getHeight()));
             etWeight.setText(Float.toString(measurement.getWeight()));
             updateBMI();
         }

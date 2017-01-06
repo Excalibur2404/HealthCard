@@ -104,11 +104,11 @@ public class MeasurementDataAdapter extends BaseAdapter implements ListAdapter, 
         cal.set(Calendar.MONTH, measurement.getMonth());
         cal.set(Calendar.YEAR, measurement.getYear());
         measurementDate.setText(df.format(cal.getTime()));
-        height.setText(Float.toString(measurement.getHight()));
+        height.setText(Float.toString(measurement.getHeight()));
         weight.setText(Float.toString(measurement.getWeight()));
-        if (measurement.getHight() != 0 && measurement.getWeight() != 0)
+        if (measurement.getHeight() != 0 && measurement.getWeight() != 0)
         {
-            bmi.setText(Float.toString(measurement.getWeight()/(measurement.getHight() * measurement.getHight())));
+            bmi.setText(Float.toString(Measurement.getBMI(measurement.getWeight(), measurement.getHeight())));
         }
         else
         {

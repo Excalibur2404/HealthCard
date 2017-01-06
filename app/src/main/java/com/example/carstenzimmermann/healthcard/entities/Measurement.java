@@ -1,7 +1,5 @@
 package com.example.carstenzimmermann.healthcard.entities;
 
-import android.icu.util.Measure;
-
 /**
  * Created by Carsten Zimmermann on 22.10.2016.
  */
@@ -9,7 +7,7 @@ import android.icu.util.Measure;
 public class Measurement
 {
     private float weight;
-    private float hight;
+    private float height;
     private int dayOfMonth;
     private int month;
     private int year;
@@ -18,7 +16,7 @@ public class Measurement
 
     public Measurement(){}
 
-    public Measurement(int id, int childId, int dayOfMonth, int month, int year, float weight, float hight)
+    public Measurement(int id, int childId, int dayOfMonth, int month, int year, float weight, float height)
     {
         this._id = id;
         this.childId = childId;
@@ -26,7 +24,7 @@ public class Measurement
         this.month = month;
         this.year = year;
         this.weight = weight;
-        this.hight = hight;
+        this.height = height;
     }
 
     public float getWeight()
@@ -39,12 +37,12 @@ public class Measurement
         this.weight = weight;
     }
 
-    public float getHight() {
-        return hight;
+    public float getHeight() {
+        return height;
     }
 
-    public void setHight(float hight) {
-        this.hight = hight;
+    public void setHeight(float height) {
+        this.height = height;
     }
 
     public int getDayOfMonth()
@@ -99,6 +97,10 @@ public class Measurement
 
     public float getBMI()
     {
-        return getWeight() * getHight() * getHight();
+        return getBMI(weight, height);
+    }
+    public static float getBMI(float weight, float height)
+    {
+        return Math.round(weight / (height * height) * 100) / 100;
     }
 }
