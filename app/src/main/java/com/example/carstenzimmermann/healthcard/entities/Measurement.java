@@ -6,8 +6,8 @@ package com.example.carstenzimmermann.healthcard.entities;
 
 public class Measurement
 {
-    private float weight;
-    private float height;
+    private Float weight;
+    private Float height;
     private int dayOfMonth;
     private int month;
     private int year;
@@ -27,21 +27,32 @@ public class Measurement
         this.height = height;
     }
 
-    public float getWeight()
+    public Measurement(int id, int childId, int dayOfMonth, int month, int year, Float weight, Float height)
+    {
+        this._id = id;
+        this.childId = childId;
+        this.dayOfMonth = dayOfMonth;
+        this.month = month;
+        this.year = year;
+        this.weight = weight;
+        this.height = height;
+    }
+
+    public Float getWeight()
     {
         return weight;
     }
 
-    public void setWeight(float weight)
+    public void setWeight(Float weight)
     {
         this.weight = weight;
     }
 
-    public float getHeight() {
+    public Float getHeight() {
         return height;
     }
 
-    public void setHeight(float height) {
+    public void setHeight(Float height) {
         this.height = height;
     }
 
@@ -101,6 +112,6 @@ public class Measurement
     }
     public static float getBMI(float weight, float height)
     {
-        return Math.round(weight / (height * height) * 100) / 100;
+        return new Float(Math.round(weight / (height * height) * 100) / 100);
     }
 }

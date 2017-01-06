@@ -260,8 +260,22 @@ public class MeasurementEditFragment extends Fragment
             cal.set(Calendar.MONTH, measurement.getMonth());
             cal.set(Calendar.YEAR, measurement.getYear());
             tvDate.setText(df.format(cal.getTime()));
-            etHeight.setText(Float.toString(measurement.getHeight()));
-            etWeight.setText(Float.toString(measurement.getWeight()));
+            if (measurement.getHeight() != null)
+            {
+                etHeight.setText(Float.toString(measurement.getHeight()));
+            }
+            else
+            {
+                etHeight.setText("");
+            }
+            if (measurement.getWeight() != null)
+            {
+                etWeight.setText(Float.toString(measurement.getWeight()));
+            }
+            else
+            {
+                etWeight.setText("");
+            }
             updateBMI();
         }
     }

@@ -1,6 +1,7 @@
 package com.example.carstenzimmermann.healthcard;
 
 import android.content.Context;
+import android.opengl.Visibility;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -24,11 +25,11 @@ import java.util.Locale;
 
 public class MeasurementDataAdapter extends BaseAdapter implements ListAdapter, Filterable
 {
-    ArrayList<Measurement> unfilteredMeasurementList;
-    ArrayList<Measurement> filteredMeasurementList;
-    Context context;
-    IMeasurementDataAdapterListener listener;
-    DateFormat df;
+    private ArrayList<Measurement> unfilteredMeasurementList;
+    private ArrayList<Measurement> filteredMeasurementList;
+    private Context context;
+    private IMeasurementDataAdapterListener listener;
+    private DateFormat df;
     private MeasurementDataFilter filter = new MeasurementDataFilter();
 
     public MeasurementDataAdapter(Context c, IMeasurementDataAdapterListener listener)
@@ -37,7 +38,7 @@ public class MeasurementDataAdapter extends BaseAdapter implements ListAdapter, 
         unfilteredMeasurementList = dataManager.getMeasurements();
         this.context = c;
         this.listener = listener;
-        this.df = DateFormat.getDateInstance(DateFormat.SHORT, Locale.getDefault());
+        this.df = DateFormat.getDateInstance(DateFormat.MEDIUM, Locale.getDefault());
     }
 
 
@@ -93,22 +94,41 @@ public class MeasurementDataAdapter extends BaseAdapter implements ListAdapter, 
         TextView height = (TextView) row.findViewById(R.id.tv_height);
         TextView weight = (TextView) row.findViewById(R.id.tv_weight);
         TextView bmi = (TextView) row.findViewById(R.id.tv_bmi);
+        TextView tvHeightUOM = (TextView) row.findViewById(R.id.tv_heightUnitOfMeasurement);
+        TextView tvWeightUOM = (TextView) row.findViewById(R.id.tv_weightUnitOfMeasurement);
 
         // get data to display
         final Measurement measurement = filteredMeasurementList.get(position);
-
-
 
         Calendar cal = Calendar.getInstance();
         cal.set(Calendar.DAY_OF_MONTH, measurement.getDayOfMonth());
         cal.set(Calendar.MONTH, measurement.getMonth());
         cal.set(Calendar.YEAR, measurement.getYear());
         measurementDate.setText(df.format(cal.getTime()));
-        height.setText(Float.toString(measurement.getHeight()));
-        weight.setText(Float.toString(measurement.getWeight()));
-        if (measurement.getHeight() != 0 && measurement.getWeight() != 0)
+        if (measurement.getHeight() != null)
         {
-            bmi.setText(Float.toString(Measurement.getBMI(measurement.getWeight(), measurement.getHeight())));
+            height.setText(String.format(Locale.getDefault(), "%.2f", measurement.getHeight()));
+            tvHeightUOM.setVisibility(TextView.VISIBLE);
+        }
+        else
+        {
+            height.setText("");
+            tvHeightUOM.setVisibility(TextView.INVISIBLE);
+        }
+        if (measurement.getWeight() != null)
+        {
+            weight.setText(String.format(Locale.getDefault(), "%.2f", measurement.getWeight()));
+            tvWeightUOM.setVisibility(TextView.VISIBLE);
+        }
+        else
+        {
+            weight.setText("");
+            tvWeightUOM.setVisibility(TextView.INVISIBLE);
+        }
+
+        if (measurement.getHeight() != null && measurement.getWeight() != null && measurement.getHeight() != 0f && measurement.getWeight() != 0f)
+        {
+            bmi.setText(String.format(Locale.getDefault(), "%.1f", Measurement.getBMI(measurement.getWeight(), measurement.getHeight())));
         }
         else
         {

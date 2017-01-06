@@ -202,7 +202,14 @@ public class ChartFragment extends Fragment
             entry = new Entry();
             entry.setX(cal.getTimeInMillis() - birthdateTimestamp);
             Log.d(this.getClass().getName(), "X-Value is " + entry.getX());
-            entry.setY(measurement.getWeight());
+            if (measurement.getWeight() != null)
+            {
+                entry.setY(measurement.getWeight());
+            }
+            else
+            {
+                continue;
+            }
             xMaxValue = entry.getX();
             yMaxValue = entry.getY();
             entries.add(entry);
@@ -229,26 +236,10 @@ public class ChartFragment extends Fragment
         chart.getLegend().setEnabled(false);
         chart.setDescription(null);
 
-        // Zoomfaktorberechnung für Y-Achse:
-        // 1. Suche den zeitlich letzten Y-Wert der Kindsdaten. Suche bis zu diesem Zeitpunkt nach dem maximalen Wert in der
-        //    Messwertdatenkurze und dem 97%-Perzentil und speichere den gefundenen Y-Wert als "yCurrent".
-        // 2. Suche den maximalen Y-Wert in der Kindsdatenkurve und dem 97% Perzentil über alle X-Werte und speichere ihn als "yMax".
-        // 3. Der Faktor ist gleich yMax / yCurrent.
-
-        // Zoomfaktorberechnung für X-Achse:
-        // 1. Suche den zeitlich letzten Y-Wert des Kindes und speichere dessen X-Wert als "xCurrent".
-        // 2. Suche den zeitlich letzten X-Wert über alle Daten und speichere ihn unter "xMax".
-        // 4. Der Faktor ist gleich xMax / xCurrent.
-
-
         //determine the zoom factor:
         float zoomFactorX = getZoomFactorX(percentile97entries, entries);
         float zoomFactorY = getZoomFactorY(percentile97entries, entries);
         chart.zoom(zoomFactorX, zoomFactorY, 0f, 0f);
-        //todo: set a proper initial zoom
-        /*float xZoomFactor = 157852800000f / xMaxValue;
-        float yZoomFactor = 23.8f / 5.6f;
-        chart.zoom(xZoomFactor, yZoomFactor, 0f, 0f);*/
 
         // update rhe chart
         chart.invalidate();

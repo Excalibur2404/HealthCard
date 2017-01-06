@@ -75,12 +75,12 @@ public class DataManager
         measurements.add(new Measurement(5   ,1       ,10  ,11    ,2015 ,8.4f   ,0.69f));
         measurements.add(new Measurement(6   ,1       ,9   ,12    ,2015 ,8.6f   ,0.70f));
         measurements.add(new Measurement(7   ,1       ,12  ,1     ,2016 ,8.7f   ,0.74f));
-        measurements.add(new Measurement(8   ,1       ,18  ,2     ,2016 ,8.8f   ,0.0f));
-        measurements.add(new Measurement(9   ,1       ,2   ,3     ,2016 ,9.0f   ,0.0f));
+        measurements.add(new Measurement(8   ,1       ,18  ,2     ,2016 ,8.8f   , null));
+        measurements.add(new Measurement(9   ,1       ,2   ,3     ,2016 ,9.0f   , null));
         measurements.add(new Measurement(10  ,1       ,13  ,4     ,2016 ,9.9f   ,0.77f));
         measurements.add(new Measurement(11  ,1       ,19  ,4     ,2016 ,9.9f   ,0.775f));
         measurements.add(new Measurement(12  ,1       ,21  ,7     ,2016 ,10.8f  ,0.82f));
-        measurements.add(new Measurement(13  ,1       ,9   ,8     ,2016 ,10.7f  ,0.0f));
+        measurements.add(new Measurement(13  ,1       ,9   ,8     ,2016 ,10.7f  , null));
         measurements.add(new Measurement(14  ,1       ,23  ,9     ,2016 ,11f    ,0.85f));
         measurements.add(new Measurement(15  ,1       ,9   ,11    ,2016 ,11.5f  ,0.86f));
         measurements.add(new Measurement(16  ,1       ,3   ,12    ,2016 ,11.6f  ,0.86f));
