@@ -9,6 +9,7 @@ import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Parcelable;
+import android.provider.CalendarContract;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -66,7 +67,7 @@ public class EditChildFragment extends Fragment
     {
         public void onSaveChildClicked(Child child);
         public void onCancelClicked();
-        public void onDateEditClicked(int dateRequesterId);
+        public void onDateEditClicked(int dateRequesterId, int dayOfMonth, int month, int year);
     }
 
     @Override
@@ -120,7 +121,26 @@ public class EditChildFragment extends Fragment
             @Override
             public void onClick(View v)
             {
-                listener.onDateEditClicked(DATE_REQUESTER_ID);
+                Calendar cal = Calendar.getInstance();
+                Date date;
+                try
+                {
+                    date = df.parse(tvBirthdate.getText().toString());
+                    cal.setTime(date);
+
+
+                }
+                catch (ParseException e)
+                {
+                    Log.w(this.getClass().getName(), "Could not parse the date value "
+                            + tvBirthdate.getText() + " to a date using the format "
+                            + df.getNumberFormat() + ". Using the current date instead.");
+                }
+                listener.onDateEditClicked(
+                        DATE_REQUESTER_ID,
+                        cal.get(Calendar.DAY_OF_MONTH),
+                        cal.get(Calendar.MONTH),
+                        cal.get(Calendar.YEAR));
             }
         });
         return view;

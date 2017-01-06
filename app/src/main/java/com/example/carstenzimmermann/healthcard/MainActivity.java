@@ -2,6 +2,8 @@ package com.example.carstenzimmermann.healthcard;
 
 import android.app.DatePickerDialog;
 import android.content.DialogInterface;
+import android.os.PersistableBundle;
+import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AlertDialog;
@@ -15,10 +17,11 @@ import com.example.carstenzimmermann.healthcard.entities.Child;
 import com.example.carstenzimmermann.healthcard.entities.Measurement;
 import com.example.carstenzimmermann.healthcard.fragments.ChartFragment;
 import com.example.carstenzimmermann.healthcard.fragments.ChildListFragment;
-import com.example.carstenzimmermann.healthcard.fragments.DatePickerFragment;
 import com.example.carstenzimmermann.healthcard.fragments.EditChildFragment;
 import com.example.carstenzimmermann.healthcard.fragments.MeasurementEditFragment;
 import com.example.carstenzimmermann.healthcard.fragments.MeasurementListFragment;
+
+import net.davidcesarino.android.common.ui.DatePickerDialogFragment;
 
 import java.util.List;
 
@@ -27,6 +30,7 @@ public class MainActivity
         implements  ChildListFragment.ChildListFragmentListener,
                     EditChildFragment.EditChildFragmentListener,
                     DatePickerDialog.OnDateSetListener,
+                    DatePickerDialog.OnCancelListener,
                     MeasurementEditFragment.MeasurementEditFragmentListener
 {
     DataManager dataManager;
@@ -36,13 +40,14 @@ public class MainActivity
     public final String MEASUREMENT_EDIT_FRAGMENT_TAG = "measurment_edit_fragment";
     public final String MEASUREMENT_LIST_FRAGMENT_TAG = "measurement_list_fragment";
     private int dateRequesterId;
+    private final String DATE_REQUESTER_ID = "date_requester_id";
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
-
+        if (savedInstanceState != null) dateRequesterId = savedInstanceState.getInt(DATE_REQUESTER_ID);
         if (dataManager == null) dataManager = DataManager.getInstance();
         setContentView(R.layout.activity_main);
         FragmentManager fm = getSupportFragmentManager();
@@ -54,6 +59,19 @@ public class MainActivity
             fta.replace(R.id.fragmentContainer, childListFragment, CHILD_LIST_FRAGMENT_TAG);
             fta.commit();
         }
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState)
+    {
+        super.onSaveInstanceState(outState);
+        outState.putInt(DATE_REQUESTER_ID, dateRequesterId);
+    }
+
+    @Override
+    public void onRestoreInstanceState(Bundle savedInstanceState, PersistableBundle persistentState)
+    {
+        super.onRestoreInstanceState(savedInstanceState, persistentState);
     }
 
     @Override
@@ -287,19 +305,24 @@ public class MainActivity
     }
 
     @Override
-    public void onDateEditClicked(int dateRequesterId)
+    public void onDateEditClicked(int dateRequesterId, int dayOfMonth, int month, int year)
     {
-        DatePickerFragment datePickerFragment = new DatePickerFragment();
-        FragmentManager fm = getSupportFragmentManager();
-        FragmentTransaction transaction = fm.beginTransaction();
-        transaction.add(datePickerFragment, "DATE_PICKER_FRAGMENT");
-        transaction.commit();
+        //trying the workaround for the Jellybean Bug in the DatePickerDialog:
+        Bundle b = new Bundle();
+        b.putInt(DatePickerDialogFragment.YEAR, year);
+        b.putInt(DatePickerDialogFragment.MONTH, month);
+        b.putInt(DatePickerDialogFragment.DATE, dayOfMonth);
+        DialogFragment picker = new DatePickerDialogFragment();
+        picker.setArguments(b);
+        //todo: Store away the requester id in the appropriate method. Otherwise the ID gets lost when the view is recreated during screen orientation change.
         this.dateRequesterId = dateRequesterId;
+        picker.show(this.getSupportFragmentManager(), "DATE_PICKER_FRAGMENT");
     }
 
     @Override
     public void onDateSet(DatePicker view, int year, int month, int dayOfMonth)
     {
+        Log.d(this.getClass().getName(), "Executing onDateSet()...");
         FragmentManager fm = getSupportFragmentManager();
         if (this.dateRequesterId == EditChildFragment.DATE_REQUESTER_ID)
         {
@@ -310,12 +333,18 @@ public class MainActivity
             }
         }
         else if (this.dateRequesterId == MeasurementEditFragment.DATE_REQUESTER_ID)
-        {
+            {
             MeasurementEditFragment measurementEditFragment = (MeasurementEditFragment) fm.findFragmentByTag(MEASUREMENT_EDIT_FRAGMENT_TAG);
             if (measurementEditFragment != null)
             {
                 measurementEditFragment.setMeasurementDate(dayOfMonth, month, year);
             }
         }
+    }
+
+    @Override
+    public void onCancel(DialogInterface dialog)
+    {
+        //do nothing
     }
 }

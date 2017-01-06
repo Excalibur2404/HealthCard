@@ -5,6 +5,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,6 +21,8 @@ import java.text.ParseException;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
+
+import static com.example.carstenzimmermann.healthcard.R.id.tvBirthdate;
 
 /**
  * Created by Carsten Zimmermann on 15.11.2016.
@@ -49,7 +52,7 @@ public class MeasurementEditFragment extends Fragment
         listener = (MeasurementEditFragmentListener) this.getActivity();
         Button btSave = (Button) view.findViewById(R.id.btSave);
         Button btCancel = (Button) view.findViewById(R.id.btCancel);
-        TextView tvDate = (TextView) view.findViewById(R.id.tvDate);
+        final EditText tvDate = (EditText) view.findViewById(R.id.tvDate);
 
         btSave.setOnClickListener(new View.OnClickListener()
         {
@@ -65,7 +68,26 @@ public class MeasurementEditFragment extends Fragment
             @Override
             public void onClick(View v)
             {
-                listener.onDateEditClicked(DATE_REQUESTER_ID);
+                Calendar cal = Calendar.getInstance();
+                Date date;
+                try
+                {
+                    date = df.parse(tvDate.getText().toString());
+                    cal.setTime(date);
+
+
+                }
+                catch (ParseException e)
+                {
+                    Log.w(this.getClass().getName(), "Could not parse the date value "
+                            + tvDate.getText() + " to a date using the format "
+                            + df.getNumberFormat() + ". Using the current date instead.");
+                }
+                listener.onDateEditClicked(
+                        DATE_REQUESTER_ID,
+                        cal.get(Calendar.DAY_OF_MONTH),
+                        cal.get(Calendar.MONTH),
+                        cal.get(Calendar.YEAR));
             }
         });
 
@@ -200,7 +222,7 @@ public class MeasurementEditFragment extends Fragment
 
     public interface MeasurementEditFragmentListener
     {
-        public void onDateEditClicked(int dateRequesterId);
+        public void onDateEditClicked(int dateRequesterId, int dayOfMonth, int month, int year);
         public void onSaveMeasurementClicked(Measurement measurement);
         public void onCancelClicked();
     }

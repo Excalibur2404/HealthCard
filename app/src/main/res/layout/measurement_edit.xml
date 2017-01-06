@@ -10,11 +10,15 @@
         android:id="@+id/tvDateLabel"
         android:textAppearance="@android:style/TextAppearance.Material.Medium"/>
 
-    <TextView
-        android:layout_width="match_parent"
+    <EditText
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_gravity="fill_horizontal"
         android:id="@+id/tvDate"
-        android:textAppearance="@android:style/TextAppearance.Material.Medium"/>
+        android:textAppearance="@android:style/TextAppearance.Material.Medium"
+        android:layout_marginLeft="8dp"
+        android:ellipsize="end"
+        android:editable="false"/>
 
     <TextView
         android:text="@string/height3rd"
@@ -22,15 +26,20 @@
         android:layout_height="wrap_content"
         android:layout_column="0"
         android:layout_row="1"
-        android:id="@+id/tvHeightLabel"/>
+        android:id="@+id/tvHeightLabel"
+        android:textAppearance="@android:style/TextAppearance.Material.Medium"/>
 
     <EditText
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_gravity="fill_horizontal"
         android:inputType="numberDecimal"
         android:layout_column="1"
         android:layout_row="1"
-        android:id="@+id/etHeight"/>
+        android:id="@+id/etHeight"
+        android:layout_marginLeft="8dp"
+        android:ellipsize="end"
+        android:textAppearance="@android:style/TextAppearance.Material.Medium"/>
 
     <TextView
         android:text="@string/weight3rd"
@@ -38,19 +47,24 @@
         android:layout_height="wrap_content"
         android:layout_column="0"
         android:layout_row="2"
-        android:id="@+id/tvWeight"/>
+        android:id="@+id/tvWeight"
+        android:textAppearance="@android:style/TextAppearance.Material.Medium"/>
 
     <EditText
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_gravity="fill_horizontal"
         android:inputType="numberDecimal"
         android:layout_column="1"
         android:layout_row="2"
-        android:id="@+id/etWeight"/>
+        android:id="@+id/etWeight"
+        android:layout_marginLeft="8dp"
+        android:ellipsize="end"
+        android:textAppearance="@android:style/TextAppearance.Material.Medium"/>
 
     <LinearLayout
         android:orientation="horizontal"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         android:layout_row="3"
