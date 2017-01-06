@@ -2,6 +2,7 @@ package com.example.carstenzimmermann.healthcard;
 
 import android.app.DatePickerDialog;
 import android.content.DialogInterface;
+import android.icu.util.Measure;
 import android.os.PersistableBundle;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentManager;
@@ -31,7 +32,8 @@ public class MainActivity
                     EditChildFragment.EditChildFragmentListener,
                     DatePickerDialog.OnDateSetListener,
                     DatePickerDialog.OnCancelListener,
-                    MeasurementEditFragment.MeasurementEditFragmentListener
+                    MeasurementEditFragment.MeasurementEditFragmentListener,
+                    MeasurementListFragment.IMeasurementListFragmentListener
 {
     DataManager dataManager;
     public final String CHILD_LIST_FRAGMENT_TAG = "child_list_fragment";
@@ -112,23 +114,6 @@ public class MainActivity
     }
 
     @Override
-    public void onSaveMeasurementClicked(Measurement measurement)
-    {
-        dataManager.saveMeasurement(measurement);
-        FragmentManager fm = getSupportFragmentManager();
-        ChildListFragment childListFragment = (ChildListFragment)fm.findFragmentByTag(CHILD_LIST_FRAGMENT_TAG);
-        if (childListFragment == null)
-        {
-            childListFragment = new ChildListFragment();
-        }
-        FragmentTransaction fta = fm.beginTransaction();
-        fta.replace(R.id.fragmentContainer, childListFragment);
-        fta.addToBackStack(null);
-        fta.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_CLOSE);
-        fta.commit();
-    }
-
-    @Override
     public void onCancelClicked()
     {
         FragmentManager fm = getSupportFragmentManager();
@@ -168,8 +153,34 @@ public class MainActivity
         fta.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
         fta.commit();
         fm.executePendingTransactions();
-        measurementEditFragment.clearMeasurement();
         measurementEditFragment.setChildId(childId);
+        measurementEditFragment.clearMeasurement();
+    }
+
+    @Override
+    public void onEditMeasurementClicked(int id)
+    {
+        FragmentManager fm = getSupportFragmentManager();
+        MeasurementEditFragment measurementEditFragment = (MeasurementEditFragment) fm.findFragmentByTag(MEASUREMENT_EDIT_FRAGMENT_TAG);
+        if (measurementEditFragment == null)
+        {
+            measurementEditFragment = new MeasurementEditFragment();
+        }
+        FragmentTransaction fta = fm.beginTransaction();
+        fta.replace(R.id.fragmentContainer, measurementEditFragment, MEASUREMENT_EDIT_FRAGMENT_TAG);
+        fta.addToBackStack(null);
+        fta.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
+        fta.commit();
+        fm.executePendingTransactions();
+        measurementEditFragment.displayMeasurement(id);
+    }
+
+    @Override
+    public void onMeasurementSavedClicked()
+    {
+        FragmentManager fm = getSupportFragmentManager();
+        fm.popBackStack();
+        fm.executePendingTransactions();
     }
 
     @Override
@@ -267,7 +278,6 @@ public class MainActivity
 
         if (measurements.size() == 0)
         {
-            //This anonymous class handles the confirmation to delete a child entry
             DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
@@ -347,4 +357,12 @@ public class MainActivity
     {
         //do nothing
     }
+
+    @Override
+    public void onDeleteMeasurementClicked(int id)
+    {
+        //todo: implement method
+    }
+
+
 }

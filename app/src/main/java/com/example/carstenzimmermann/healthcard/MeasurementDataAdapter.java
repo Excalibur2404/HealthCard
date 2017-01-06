@@ -1,6 +1,7 @@
 package com.example.carstenzimmermann.healthcard;
 
 import android.content.Context;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -93,7 +94,11 @@ public class MeasurementDataAdapter extends BaseAdapter implements ListAdapter, 
         TextView weight = (TextView) row.findViewById(R.id.tv_weight);
         TextView bmi = (TextView) row.findViewById(R.id.tv_bmi);
 
-        Measurement measurement = filteredMeasurementList.get(position);
+        // get data to display
+        final Measurement measurement = filteredMeasurementList.get(position);
+
+
+
         Calendar cal = Calendar.getInstance();
         cal.set(Calendar.DAY_OF_MONTH, measurement.getDayOfMonth());
         cal.set(Calendar.MONTH, measurement.getMonth());
@@ -109,6 +114,19 @@ public class MeasurementDataAdapter extends BaseAdapter implements ListAdapter, 
         {
             bmi.setText("");
         }
+
+        // set listener for event to edit line
+        row.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+                Log.d(this.getClass().getName(), "Click on Measurement with id "
+                        + measurement.get_id() + " was clicked.");
+                listener.onEditClicked(measurement.get_id());
+            }
+        });
+
         return row;
     }
 

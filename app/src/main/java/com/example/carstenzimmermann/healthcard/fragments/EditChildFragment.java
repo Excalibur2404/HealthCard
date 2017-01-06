@@ -53,6 +53,8 @@ public class EditChildFragment extends Fragment
     public static final String          TASK_NEW_CHILD = "new_child";
     public static final String          TASK_EDIT_CHILD = "edit_child";
     public static final String          KEY_TASK = "task";
+    public static final String          KEY_CHILD_ID = "child_id";
+    private static final String         KEY_IMAGE_CHANGED = "image_changed";
     private static int                  PICK_PHOTO_FOR_AVATAR = 1;
     public static final int             DATE_REQUESTER_ID = 1;
 
@@ -75,7 +77,23 @@ public class EditChildFragment extends Fragment
     {
         super.onCreate(savedInstanceState);
         this.df = DateFormat.getDateInstance(DateFormat.SHORT, Locale.getDefault());
+        if (savedInstanceState != null)
+        {
+            childId = savedInstanceState.getInt(KEY_CHILD_ID);
+            task = savedInstanceState.getString(KEY_TASK);
+            imageChanged = savedInstanceState.getBoolean(KEY_IMAGE_CHANGED);
+        }
     }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState)
+    {
+        super.onSaveInstanceState(outState);
+        outState.putInt(KEY_CHILD_ID, childId);
+        outState.putString(KEY_TASK, task);
+        outState.putBoolean(KEY_IMAGE_CHANGED, imageChanged);
+    }
+
 
     @Nullable
     @Override
@@ -143,6 +161,7 @@ public class EditChildFragment extends Fragment
                         cal.get(Calendar.YEAR));
             }
         });
+        //todo: solve issue of lost data when text fields have been changed and screen is rotated
         return view;
     }
 

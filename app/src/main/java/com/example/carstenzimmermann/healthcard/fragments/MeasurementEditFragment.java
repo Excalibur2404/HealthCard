@@ -6,6 +6,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,6 +14,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.example.carstenzimmermann.healthcard.DataManager;
 import com.example.carstenzimmermann.healthcard.R;
 import com.example.carstenzimmermann.healthcard.entities.Measurement;
 
@@ -22,19 +24,25 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.Locale;
 
-import static com.example.carstenzimmermann.healthcard.R.id.tvBirthdate;
-
 /**
  * Created by Carsten Zimmermann on 15.11.2016.
  */
 
 public class MeasurementEditFragment extends Fragment
 {
-    public static int DATE_REQUESTER_ID = 2;
+    public static final int DATE_REQUESTER_ID = 2;
 
-    private int measurementSetId;
+
+    //measurement properties
+    private int _id;
+    public static final String ID = "id";
     private int childId;
+    public static final String CHILD_ID = "childId";
+    private float weight;
+    public static final String WEIGHT = "weight";
+
     private DateFormat df;
+    private DataManager dataManager;
     MeasurementEditFragmentListener listener;
 
     @Override
@@ -42,6 +50,20 @@ public class MeasurementEditFragment extends Fragment
     {
         super.onCreate(savedInstanceState);
         this.df = DateFormat.getDateInstance(DateFormat.SHORT, Locale.getDefault());
+        this.dataManager = DataManager.getInstance();
+        if (savedInstanceState != null)
+        {
+            _id = savedInstanceState.getInt(ID);
+            childId = savedInstanceState.getInt(CHILD_ID);
+        }
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState)
+    {
+        super.onSaveInstanceState(outState);
+        outState.putInt(ID, _id);
+        outState.putInt(CHILD_ID, childId);
     }
 
     @Nullable
@@ -53,6 +75,11 @@ public class MeasurementEditFragment extends Fragment
         Button btSave = (Button) view.findViewById(R.id.btSave);
         Button btCancel = (Button) view.findViewById(R.id.btCancel);
         final EditText tvDate = (EditText) view.findViewById(R.id.tvDate);
+        tvDate.setText(df.format(Calendar.getInstance().getTime()));
+        EditText etWeight = (EditText) view.findViewById(R.id.etWeight);
+        etWeight.setText(Float.toString(weight));
+        EditText etHeight = (EditText) view.findViewById(R.id.etHeight);
+//        EditText etBMI = (EditText) view.findViewById(R.id.etBmi);
 
         btSave.setOnClickListener(new View.OnClickListener()
         {
@@ -100,7 +127,47 @@ public class MeasurementEditFragment extends Fragment
             }
         });
 
+//        etWeight.setOnKeyListener(new View.OnKeyListener()
+//        {
+//            @Override
+//            public boolean onKey(View v, int keyCode, KeyEvent event)
+//            {
+//                updateBMI();
+//                return true;
+//            }
+//        });
+//
+//        etHeight.setOnKeyListener(new View.OnKeyListener()
+//        {
+//            @Override
+//            public boolean onKey(View v, int keyCode, KeyEvent event)
+//            {
+//                updateBMI();
+//                return true;
+//            }
+//        });
+
+
         return view;
+    }
+
+    private void updateBMI()
+    {
+//        EditText etHeight = (EditText) getView().findViewById(R.id.etHeight);
+//        EditText etWeight = (EditText) getView().findViewById(R.id.etWeight);
+//        EditText etBMI = (EditText) getView().findViewById(R.id.etBmi);
+//        float weight = 0f;
+//        float height = 0f;
+//        if (etWeight.getText() != null && etWeight.getText().toString() != "") weight = Float.parseFloat(etWeight.getText().toString());
+//        if (etHeight.getText() != null && etHeight.getText().toString() != "") height = Float.parseFloat(etHeight.getText().toString());
+//        if (weight == 0f || height == 0f)
+//        {
+//            etBMI.setText("");
+//        }
+//        else
+//        {
+//            etBMI.setText(Float.toString(Math.round(weight / height * height * 100) / 100));
+//        }
     }
 
     private void saveMeasurements()
@@ -111,7 +178,7 @@ public class MeasurementEditFragment extends Fragment
         EditText etHeight = (EditText) getView().findViewById(R.id.etHeight);
         EditText etWeight = (EditText) getView().findViewById(R.id.etWeight);
 
-        measurement.set_id(measurementSetId);
+        measurement.set_id(_id);
         measurement.setChildId(childId);
         Date measurementDate = null;
         try
@@ -139,7 +206,16 @@ public class MeasurementEditFragment extends Fragment
             measurement.setWeight(Float.valueOf(etWeight.getText().toString()));
         }
 
-        listener.onSaveMeasurementClicked(measurement);
+        dataManager.saveMeasurement(measurement);
+        listener.onMeasurementSavedClicked();
+        Log.d(this.getClass().getName(),
+                        "Saving measurement with values _id = '" + measurement.get_id() + "', " +
+                        "child_id = '" + measurement.getChildId() + "', " +
+                        "dayOfMonth = '" + measurement.getDayOfMonth() + "', " +
+                        "month = '" + measurement.getMonth() + "', " +
+                        "year = '" + measurement.getYear() + "', " +
+                        "weight = '" + measurement.getWeight() + "', " +
+                        "height = '" + measurement.getHight() + "'.");
     }
 
     public void clearMeasurement()
@@ -151,24 +227,30 @@ public class MeasurementEditFragment extends Fragment
         tvDate.setText(df.format(Calendar.getInstance().getTime()));
         etHeight.setText("");
         etWeight.setText("");
-        measurementSetId = 0;
+        _id = 0;
     }
 
-    public void displayMeasurement(int measurementSetId, int childId, int dayOfMonth, int month, int year, int weight, int height)
+    public void displayMeasurement(int measurementSetId)
     {
         TextView tvDate = (TextView) getView().findViewById(R.id.tvDate);
         EditText etHeight = (EditText) getView().findViewById(R.id.etHeight);
         EditText etWeight = (EditText) getView().findViewById(R.id.etWeight);
+        EditText etBmi = (EditText) getView().findViewById(R.id.etBmi);
 
-        this.measurementSetId = measurementSetId;
-        this.childId = childId;
-        Calendar cal = Calendar.getInstance();
-        cal.set(Calendar.DAY_OF_MONTH, dayOfMonth);
-        cal.set(Calendar.MONTH, month);
-        cal.set(Calendar.YEAR, year);
-        tvDate.setText(df.format(cal.getTime()));
-        etHeight.setText(height);
-        etWeight.setText(weight);
+        _id = measurementSetId;
+        Measurement measurement = dataManager.getMeasurement(_id);
+        if (measurement != null)
+        {
+            childId = measurement.getChildId();
+            Calendar cal = Calendar.getInstance();
+            cal.set(Calendar.DAY_OF_MONTH, measurement.getDayOfMonth());
+            cal.set(Calendar.MONTH, measurement.getMonth());
+            cal.set(Calendar.YEAR, measurement.getYear());
+            tvDate.setText(df.format(cal.getTime()));
+            etHeight.setText(Float.toString(measurement.getHight()));
+            etWeight.setText(Float.toString(measurement.getWeight()));
+            updateBMI();
+        }
     }
 
     public void setMeasurementDate(int dayOfMonth, int month, int year)
@@ -223,7 +305,7 @@ public class MeasurementEditFragment extends Fragment
     public interface MeasurementEditFragmentListener
     {
         public void onDateEditClicked(int dateRequesterId, int dayOfMonth, int month, int year);
-        public void onSaveMeasurementClicked(Measurement measurement);
+        public void onMeasurementSavedClicked();
         public void onCancelClicked();
     }
 }

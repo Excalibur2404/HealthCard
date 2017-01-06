@@ -76,7 +76,7 @@ public class DataManager
         measurements.add(new Measurement(6,2,4,1,2016,7.9f,7.9f));
         measurements.add(new Measurement(7,2,5,1,2016,9.0f,9.0f));
         measurements.add(new Measurement(8,2,6,1,2016,10.8f,10.8f));
-        nextFreeMeasurementId = 7;
+        nextFreeMeasurementId = 9;
     }
 
     public Child getChildById(int id)
@@ -225,6 +225,18 @@ public class DataManager
             }
         }
         return resultSet;
+    }
+
+    public Measurement getMeasurement(int measurementId)
+    {
+        for (Measurement measurement:measurements)
+        {
+            if (measurement.get_id() == measurementId)
+            {
+                return measurement;
+            }
+        }
+        return null;
     }
 
     public ArrayList<Measurement> getMeasurements()

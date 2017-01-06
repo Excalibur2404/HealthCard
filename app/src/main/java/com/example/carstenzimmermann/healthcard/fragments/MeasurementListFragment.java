@@ -54,13 +54,13 @@ public class MeasurementListFragment extends Fragment implements MeasurementData
     @Override
     public void onEditClicked(int id)
     {
-        //todo: implement method
+        listener.onEditMeasurementClicked(id);
     }
 
     @Override
     public void onDeleteClicked(int id)
     {
-        //todo: implement method
+        listener.onDeleteMeasurementClicked(id);
     }
 
     public interface IMeasurementListFragmentListener

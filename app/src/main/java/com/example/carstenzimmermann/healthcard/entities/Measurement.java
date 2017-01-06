@@ -96,4 +96,9 @@ public class Measurement
     {
         this.childId = childId;
     }
+
+    public float getBMI()
+    {
+        return getWeight() * getHight() * getHight();
+    }
 }
