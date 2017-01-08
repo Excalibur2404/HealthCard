@@ -161,23 +161,37 @@ public class MeasurementEditFragment extends Fragment
         EditText etBMI = (EditText) getView().findViewById(R.id.etBmi);
         float weight = 0f;
         float height = 0f;
+//        try
+//        {
+//            if (etWeight.getText() != null) weight = Float.parseFloat(etWeight.getText().toString());
+//            if (etHeight.getText() != null) height = Float.parseFloat(etHeight.getText().toString());
+//        }
+//        catch (NumberFormatException e)
+//        {
+//            // stop updating and return, try again after next edit
+//            Log.d(this.getClass().getName(), "Parsing weight or height failed. Stopping update of BMI.");
+//            return;
+//        }
+
+        NumberFormat format = DecimalFormat.getInstance(Locale.getDefault());
+        Number numberWeight = null;
+        Number numberHeight = null;
         try
         {
-            if (etWeight.getText() != null) weight = Float.parseFloat(etWeight.getText().toString());
-            if (etHeight.getText() != null) height = Float.parseFloat(etHeight.getText().toString());
+            numberHeight = format.parse(etHeight.getText().toString());
+            numberWeight = format.parse(etWeight.getText().toString());
         }
-        catch (NumberFormatException e)
+        catch (ParseException e)
         {
-            // stop updating and return, try again after next edit
-            Log.d(this.getClass().getName(), "Parsing weight or height failed. Stopping update of BMI.");
+            e.printStackTrace();
             return;
         }
 
-        if (weight != 0f && height != 0f)
+        if (numberWeight.floatValue() != 0f && numberHeight.floatValue() != 0f)
         {
             Log.d(this.getClass().getName(), "Updating BMI. Weight is " + weight + " and height is " +
                     height + ". Weight / height * height is " + (weight / height * height));
-            etBMI.setText(Measurement.formatBMI(Measurement.getBMI(weight, height)));
+            etBMI.setText(Measurement.formatBMI(Measurement.getBMI(numberWeight.floatValue(), numberHeight.floatValue())));
         }
         else
         {
@@ -215,7 +229,6 @@ public class MeasurementEditFragment extends Fragment
 
         if ("".equals(etHeight.getText().toString()) == false)
         {
-//            measurement.setHeight(Float.valueOf(etHeight.getText().toString()));
             NumberFormat format = DecimalFormat.getInstance(Locale.getDefault());
             Number number = null;
             try
