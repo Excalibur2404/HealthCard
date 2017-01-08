@@ -33,5 +33,6 @@
     <string name="month">M</string>
     <string name="kg">kg</string>
     <string name="m">m</string>
+    <string name="cm">cm</string>
     <string name="BMI">BMI</string>
 </resources>

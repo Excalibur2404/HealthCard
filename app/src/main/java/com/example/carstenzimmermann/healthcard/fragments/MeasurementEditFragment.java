@@ -1,5 +1,6 @@
 package com.example.carstenzimmermann.healthcard.fragments;
 
+import android.icu.util.Measure;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -19,6 +20,8 @@ import com.example.carstenzimmermann.healthcard.R;
 import com.example.carstenzimmermann.healthcard.entities.Measurement;
 
 import java.text.DateFormat;
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.text.ParseException;
 import java.util.Calendar;
 import java.util.Date;
@@ -174,7 +177,7 @@ public class MeasurementEditFragment extends Fragment
         {
             Log.d(this.getClass().getName(), "Updating BMI. Weight is " + weight + " and height is " +
                     height + ". Weight / height * height is " + (weight / height * height));
-            etBMI.setText(Float.toString(Math.round(weight / (height * height) * 100) / 100));
+            etBMI.setText(Measurement.formatBMI(Measurement.getBMI(weight, height)));
         }
         else
         {
@@ -212,11 +215,35 @@ public class MeasurementEditFragment extends Fragment
 
         if ("".equals(etHeight.getText().toString()) == false)
         {
-            measurement.setHeight(Float.valueOf(etHeight.getText().toString()));
+//            measurement.setHeight(Float.valueOf(etHeight.getText().toString()));
+            NumberFormat format = DecimalFormat.getInstance(Locale.getDefault());
+            Number number = null;
+            try
+            {
+                number = format.parse(etHeight.getText().toString());
+                measurement.setHeight(number.floatValue());
+            }
+            catch (ParseException e)
+            {
+                e.printStackTrace();
+                return;
+            }
+
         }
         if ("".equals(etWeight.getText().toString()) == false)
         {
-            measurement.setWeight(Float.valueOf(etWeight.getText().toString()));
+            NumberFormat format = DecimalFormat.getInstance(Locale.getDefault());
+            Number number = null;
+            try
+            {
+                number = format.parse(etWeight.getText().toString());
+                measurement.setWeight(number.floatValue());
+            }
+            catch (ParseException e)
+            {
+                e.printStackTrace();
+                return;
+            }
         }
 
         dataManager.saveMeasurement(measurement);
@@ -262,7 +289,7 @@ public class MeasurementEditFragment extends Fragment
             tvDate.setText(df.format(cal.getTime()));
             if (measurement.getHeight() != null)
             {
-                etHeight.setText(Float.toString(measurement.getHeight()));
+                etHeight.setText(Measurement.formatHeight(measurement.getHeight()));
             }
             else
             {
@@ -270,7 +297,7 @@ public class MeasurementEditFragment extends Fragment
             }
             if (measurement.getWeight() != null)
             {
-                etWeight.setText(Float.toString(measurement.getWeight()));
+                etWeight.setText(Measurement.formatWeight(measurement.getWeight()));
             }
             else
             {

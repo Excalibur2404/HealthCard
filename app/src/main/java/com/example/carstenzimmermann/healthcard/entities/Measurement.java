@@ -1,5 +1,9 @@
 package com.example.carstenzimmermann.healthcard.entities;
 
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
+import java.util.Locale;
+
 /**
  * Created by Carsten Zimmermann on 22.10.2016.
  */
@@ -112,6 +116,30 @@ public class Measurement
     }
     public static float getBMI(float weight, float height)
     {
-        return new Float(Math.round(weight / (height * height) * 100) / 100);
+        float bmi =  weight / (height / 100 * height / 100);
+        float roundedBmiTemp = Math.round(bmi * 10);
+        float roundedBmi = roundedBmiTemp / 10;
+        return roundedBmi;
+    }
+
+    public static String formatHeight(float height)
+    {
+        NumberFormat format = DecimalFormat.getInstance(Locale.getDefault());
+        format.setMaximumFractionDigits(0);
+        return format.format(height);
+    }
+
+    public static String formatWeight(float weight)
+    {
+        NumberFormat format = DecimalFormat.getInstance(Locale.getDefault());
+        format.setMaximumFractionDigits(3);
+        return format.format(weight);
+    }
+
+    public static String formatBMI(float bmi)
+    {
+        NumberFormat format = DecimalFormat.getInstance(Locale.getDefault());
+        format.setMaximumFractionDigits(1);
+        return format.format(bmi);
     }
 }

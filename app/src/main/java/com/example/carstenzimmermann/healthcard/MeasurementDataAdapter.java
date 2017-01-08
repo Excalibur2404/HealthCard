@@ -107,7 +107,7 @@ public class MeasurementDataAdapter extends BaseAdapter implements ListAdapter, 
         measurementDate.setText(df.format(cal.getTime()));
         if (measurement.getHeight() != null)
         {
-            height.setText(String.format(Locale.getDefault(), "%.2f", measurement.getHeight()));
+            height.setText(Measurement.formatHeight(measurement.getHeight()));
             tvHeightUOM.setVisibility(TextView.VISIBLE);
         }
         else
@@ -117,7 +117,7 @@ public class MeasurementDataAdapter extends BaseAdapter implements ListAdapter, 
         }
         if (measurement.getWeight() != null)
         {
-            weight.setText(String.format(Locale.getDefault(), "%.2f", measurement.getWeight()));
+            weight.setText(Measurement.formatWeight(measurement.getWeight()));
             tvWeightUOM.setVisibility(TextView.VISIBLE);
         }
         else
@@ -128,7 +128,7 @@ public class MeasurementDataAdapter extends BaseAdapter implements ListAdapter, 
 
         if (measurement.getHeight() != null && measurement.getWeight() != null && measurement.getHeight() != 0f && measurement.getWeight() != 0f)
         {
-            bmi.setText(String.format(Locale.getDefault(), "%.1f", Measurement.getBMI(measurement.getWeight(), measurement.getHeight())));
+            bmi.setText(Measurement.formatBMI(Measurement.getBMI(measurement.getWeight(), measurement.getHeight())));
         }
         else
         {
