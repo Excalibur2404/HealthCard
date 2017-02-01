@@ -4,7 +4,7 @@
                 android:layout_height="72dp"
                 xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <ImageView
+    <!--<ImageView
         android:id="@+id/childPicture"
         android:clickable="true"
         android:layout_centerVertical="true"
@@ -24,7 +24,20 @@
         android:layout_height="60dp"
         android:clickable="true"
         android:background="@drawable/passepartout"
-        android:scaleType="fitXY"/>
+        android:scaleType="fitXY"/>-->
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/childPicture"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="8dp"
+        android:layout_centerVertical="true"
+        android:clickable="true"
+        android:src="@drawable/ic_person_placeholder"
+        app:civ_border_width="0dp"
+        app:civ_border_color="#FFFFFF"/>
 
     <ImageButton
         android:id="@+id/ib_delete_child"

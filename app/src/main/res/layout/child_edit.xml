@@ -10,15 +10,25 @@
                 android:layout_height="wrap_content"
                 xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <ImageView
+   <!-- <ImageView
         android:layout_width="200dp"
         android:layout_height="200dp"
         app:srcCompat="@drawable/ic_add_person"
         android:id="@+id/ibPortrait"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        tools:ignore="ContentDescription"/>
+        tools:ignore="ContentDescription"/>-->
 
+    <de.hdodenhof.circleimageview.CircleImageView
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/ibPortrait"
+        android:layout_width="200dp"
+        android:layout_height="200dp"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:src="@drawable/ic_add_person"
+        app:civ_border_width="0dp"
+        app:civ_border_color="#FFFFFF"/>
 
 
     <GridLayout
