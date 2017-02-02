@@ -1,5 +1,7 @@
 package com.example.carstenzimmermann.healthcard.entities;
 
+import android.util.Log;
+
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.Locale;
@@ -117,8 +119,11 @@ public class Measurement
     public static float getBMI(float weight, float height)
     {
         float bmi =  weight / (height / 100 * height / 100);
+        Log.d(Measurement.class.getName(), "BMI is " + bmi);
         float roundedBmiTemp = Math.round(bmi * 10);
+        Log.d(Measurement.class.getName(), "roundedBmiTemp is " + roundedBmiTemp);
         float roundedBmi = roundedBmiTemp / 10;
+        Log.d(Measurement.class.getName(), "roundedBmi is " + roundedBmi);
         return roundedBmi;
     }
 

@@ -6,6 +6,8 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
@@ -21,6 +23,7 @@ import com.example.carstenzimmermann.healthcard.entities.Measurement;
 
 import java.text.DateFormat;
 import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
 import java.text.NumberFormat;
 import java.text.ParseException;
 import java.util.Calendar;
@@ -130,15 +133,61 @@ public class MeasurementEditFragment extends Fragment
             }
         });
 
-        etWeight.setOnKeyListener(new View.OnKeyListener()
-        {
-            @Override
-            public boolean onKey(View v, int keyCode, KeyEvent event)
-            {
-                updateBMI();
-                return false;
-            }
-        });
+//        etWeight.addTextChangedListener(new TextWatcher()
+//                                        {
+//                                            @Override
+//                                            public void beforeTextChanged(CharSequence s, int start, int count, int after)
+//                                            {
+//
+//                                            }
+//
+//                                            @Override
+//                                            public void onTextChanged(CharSequence s, int start, int before, int count)
+//                                            {
+//
+//                                            }
+//
+//                                            @Override
+//                                            public void afterTextChanged(Editable s)
+//                                            {
+//                                                String  localizedFloatString = "";
+//                                                Log.d(this.getClass().getName(), "Text was entered: " + s.toString());
+//                                                char localizedSeparator = DecimalFormatSymbols.getInstance().getDecimalSeparator();
+//                                                if (".".equals(localizedSeparator))
+//                                                {
+//                                                     localizedFloatString = s.toString().replace(',', localizedSeparator);
+//                                                }
+//                                                else
+//                                                {
+//                                                    localizedFloatString = s.toString().replace('.', localizedSeparator);
+//                                                }
+//                                                StringBuilder stringBuilder = new StringBuilder();
+//                                                stringBuilder.append(localizedFloatString);
+//                                                for (int i=0; i<stringBuilder.length(); i++)
+//                                                {
+//                                                    if (stringBuilder.charAt(i) == localizedSeparator)
+//                                                    {
+//                                                        if (i==0)
+//                                                        {
+//                                                            stringBuilder.replace(0, 1, "");
+//                                                        }
+//                                                        //TODO: Finalize check
+//                                                    }
+//                                                }
+//
+//                                            }
+//                                        });
+
+//        etWeight.setOnKeyListener(new View.OnKeyListener()
+//        {
+//            @Override
+//            public boolean onKey(View v, int keyCode, KeyEvent event)
+//            {
+//                Log.d(this.getClass().getName(), "Key pressed. Code is " + keyCode);
+//                updateBMI();
+//                return false;
+//            }
+//        });
 
         return view;
     }
@@ -176,11 +225,14 @@ public class MeasurementEditFragment extends Fragment
             return;
         }
 
-        if (numberWeight.floatValue() != 0f && numberHeight.floatValue() != 0f)
+
+        weight = numberWeight.floatValue();
+        height = numberHeight.floatValue();
+        if (weight != 0f && height != 0f)
         {
             Log.d(this.getClass().getName(), "Updating BMI. Weight is " + weight + " and height is " +
-                    height + ". Weight / height * height is " + (weight / height * height));
-            etBMI.setText(Measurement.formatBMI(Measurement.getBMI(numberWeight.floatValue(), numberHeight.floatValue())));
+                    height + ". Weight / height * height is " + Measurement.formatBMI(Measurement.getBMI(weight, height)));
+            etBMI.setText(Measurement.formatBMI(Measurement.getBMI(weight, height)));
         }
         else
         {
